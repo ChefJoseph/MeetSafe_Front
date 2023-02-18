@@ -2,9 +2,15 @@ import { Button } from "@mui/material";
 import { useState } from "react";
 import GMap from "../../Components/GMap/GMap";
 
-function AddFormMapHolder({ map, setMap, origin, originAddress, midPoint }) {
-  const [nearby, setNearby] = useState({});
-
+function AddFormMapHolder({
+  map,
+  setMap,
+  origin,
+  originAddress,
+  midPoint,
+  nearby,
+  setNearby,
+}) {
   function searchNearby(type) {
     if (map && midPoint.lat !== undefined && midPoint.lng !== undefined) {
       fetch(
