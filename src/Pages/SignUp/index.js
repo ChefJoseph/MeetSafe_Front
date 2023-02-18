@@ -3,6 +3,7 @@ import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
+import { Link as RouteLink } from 'react-router-dom';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -16,7 +17,7 @@ function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
+      <Link to="https://mui.com/">
         MeetSafe
       </Link>{' '}
       {new Date().getFullYear()}
@@ -139,7 +140,18 @@ export default function SignUp() {
                 id="email"
                 label="Email Address"
                 name="email"
+                type="email"
                 autoComplete="email"
+              />
+               <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="phone"
+                label="Phone"
+                type="tel"
+                id="phone"
+                autoComplete="phone"
               />
               <TextField
                 margin="normal"
@@ -161,9 +173,9 @@ export default function SignUp() {
               </Button>
               <Grid container>
                 <Grid item>
-                  <Link href="#" variant="body2">
+                  <RouteLink to = "/login">
                     {"Already have an account? Sign In"}
-                  </Link>
+                  </RouteLink>
                 </Grid>
               </Grid>
               <Copyright sx={{ mt: 5 }} />

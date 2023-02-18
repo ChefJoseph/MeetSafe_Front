@@ -119,6 +119,7 @@ export default function Index({open, setOpen, handleDrawerClose, handlerDraweOpe
 
   function handleSelectExchange(ExchangeId) {
     selectExchange(ExchangeId);
+    navigate("/exchange/"+ExchangeId)
   }
   console.log(open, "SideBar/AppBar.js");
 

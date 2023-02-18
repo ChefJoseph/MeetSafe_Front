@@ -21,7 +21,7 @@ function App() {
 
       <Route path="/profile" element={<Profile/>}/>
       <Route path="/add" element={<AddExchange/>}/>
-      <Route path="/exchanges" element={<Exchanges/>}/>
+      <Route path="/exchange/:exchange_id" element={<Exchanges/>}/>
       <Route path="/history" element={<History/>}/>
       <Route path="/notifications" element={<Notifications/>}/>
     </Routes>

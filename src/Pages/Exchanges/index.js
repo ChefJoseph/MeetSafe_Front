@@ -1,10 +1,14 @@
 import React, { useContext } from 'react'
 import ExchangeContext from '../../ExchangeProvider'
 import { Toolbar, Typography } from '@mui/material';
+import { useParams } from 'react-router-dom';
 
 function Index() {
-  const { selectedExchange, exchanges } = useContext(ExchangeContext);
-  const currentExchange = exchanges.find((exchange) => exchange.id === selectedExchange);
+  const { exchange_id } = useParams()
+  const { exchanges } = useContext(ExchangeContext);
+  const currentExchange = exchanges.filter((exchange) => exchange.id == exchange_id);
+  // console.log(exchange_id)
+  console.log(currentExchange)
 
   return (
     <main >
