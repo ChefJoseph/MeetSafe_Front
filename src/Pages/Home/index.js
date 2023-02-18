@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 import SideBar from '../../Components/SideBar'
 import NavBar from '../../Components/NavBar'
+import HomeContent from './HomeContent'
 import Box from '@mui/material/Box';
 import { CssBaseline } from '@mui/material';
-import HistoryCards from './HistoryCards';
-
 
 function Index() {
   const [open, setOpen] = useState(false);
@@ -18,16 +17,23 @@ function Index() {
   };
 
   return (
-    <div>
-      <Box component="main" sx={{ flexGrow: 1, p: 3, ml:5 }}>
+    <Box component="main" sx={{ flexGrow: 1, p: 3, ml: 5, height: "90vh" }}>
       <CssBaseline />
-      <SideBar open={open} setOpen={setOpen} handleDrawerClose={handleDrawerClose} handleDrawerOpen={handleDrawerOpen}/>
-      <h1 component="main" sx={{ flexGrow: 1, p: 3 }}>Exchange History</h1>
-      <HistoryCards/>
-      <NavBar open={open} setOpen={setOpen} handleDrawerClose={handleDrawerClose} handleDrawerOpen={handleDrawerOpen}/>
-      </Box>
-    </div>
-  )
+      <SideBar
+        open={open}
+        setOpen={setOpen}
+        handleDrawerClose={handleDrawerClose}
+        handleDrawerOpen={handleDrawerOpen}
+      />
+      <HomeContent />
+      <NavBar
+        open={open}
+        setOpen={setOpen}
+        handleDrawerClose={handleDrawerClose}
+        handleDrawerOpen={handleDrawerOpen}
+      />
+    </Box>
+  );
 }
 
-export default Index
+export default Index;
