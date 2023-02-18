@@ -6,12 +6,32 @@ import Box from '@mui/material/Box';
 import { CssBaseline } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useContext } from 'react';
+import { UserContext } from '../../Context/UserContext';
 
 //Get from context and display
 
 function Index() {
+
+  const { currentUser, setCurrentUser } = useContext(UserContext);
+
   const [open, setOpen] = useState(false);
   const navigate = useNavigate()
+
+  function handleLogout() {
+    fetch("/logout",{method:"DELETE"}).then(resp => {
+      if (resp.ok) {
+        setCurrentUser({})
+        navigate("/login")
+
+      }
+      else {
+        console.log("failed to logout")
+      }
+    }
+    )
+  }
 
   const handleDrawerOpen = () => {
     setOpen(!open);
@@ -32,6 +52,7 @@ function Index() {
       <ProfileInfo/>
       <NavBar open={open} setOpen={setOpen} handleDrawerClose={handleDrawerClose} handleDrawerOpen={handleDrawerOpen}/>
       <Button onClick={handleHistoryPage}>Exchange History</Button>
+      <LogoutIcon onClick={handleLogout}>Logout</LogoutIcon>
       </Box>
       
       

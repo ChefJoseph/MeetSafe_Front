@@ -12,6 +12,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Link as RouteLink } from 'react-router-dom';
+import { useContext } from 'react';
+import { UserContext } from '../../Context/UserContext';
+import { useNavigate } from 'react-router-dom';
 
 function Copyright(props) {
   return (
@@ -29,15 +32,23 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function LogIn() {
+  const navigate = useNavigate()
+  const { setCurrentUser } = useContext(UserContext);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    fetch("/users",{
+    fetch("/login",{
       method:"POST",
-      body: data
-    }).then(resp=>resp.json()).then(data=>console.log(data))
+      body: data,
+    }).then(resp=>resp.json()).then(userObj=>{
+      console.log(userObj)
+      if (!userObj.errors || !userObj.error) {
+        setCurrentUser(userObj)
+        navigate("/home")
+      }
+    }).catch(()=>navigate("/login"))
   };
 
   return (
@@ -79,10 +90,10 @@ export default function LogIn() {
                 margin="normal"
                 required
                 fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
+                id="username"
+                label="Username"
+                name="username"
+                autoComplete="username"
               />
               <TextField
                 margin="normal"

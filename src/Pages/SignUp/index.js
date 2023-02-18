@@ -11,8 +11,11 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import PersonIcon from '@mui/icons-material/Person';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useCurrentLocation } from '../../CustomHooks/usecurrentlocation';
+import { useContext } from 'react';
+import { UserContext } from '../../Context/UserContext';
+import { useNavigate } from 'react-router-dom';
 
 function Copyright(props) {
   return (
@@ -30,8 +33,10 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignUp() {
+  const navigate = useNavigate()
   const [icon,setIcon] = useState(null)
   const [lat,lng] = useCurrentLocation()
+  const { setCurrentUser } = useContext(UserContext);
 
 
   const handleSubmit = (event) => {
@@ -45,8 +50,13 @@ export default function SignUp() {
 
     fetch("/users",{
       method:"POST",
-      body: data
-    }).then(resp=>resp.json()).then(data=>console.log(data))
+      body: data,
+    }).then(resp=>resp.json()).then(userObj => {
+        if (!userObj.errors) {
+          setCurrentUser(userObj)
+          navigate("/home")
+        }
+    })
   };
 
   function handleIconChange(e) {
