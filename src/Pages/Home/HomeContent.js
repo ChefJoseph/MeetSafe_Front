@@ -20,7 +20,7 @@ function HomeContent() {
   }, []);
 
   useEffect(() => {
-    if (currentUser.id) {
+    if (currentUser.id && currentUser.lat && currentUser.lng) {
       setCenter({
         lat: parseFloat(currentUser.lat),
         lng: parseFloat(currentUser.lng),
@@ -30,16 +30,22 @@ function HomeContent() {
 
   return (
     <Box sx={{ height: "100%", width: "100%" }}>
-      <Button onClick={() => map.panTo(center)}>Back to Center</Button>
-      <GMap
-        map={map}
-        setMap={setMap}
-        origin={center}
-        midPoint={null}
-        width={"100%"}
-        height={"100%"}
-        nearby={{}}
-      />
+      {center ? (
+        <>
+          <Button onClick={() => map.panTo(center)}>Back to Center</Button>
+          <GMap
+            map={map}
+            setMap={setMap}
+            origin={center}
+            midPoint={null}
+            width={"100%"}
+            height={"100%"}
+            nearby={{}}
+          />
+        </>
+      ) : (
+        <h1>Please enter your default address</h1>
+      )}
     </Box>
   );
 }
