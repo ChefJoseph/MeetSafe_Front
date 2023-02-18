@@ -43,9 +43,9 @@ function App() {
     })
   },[])
   
-  if (!verfied) {
-    return <h1>Not verified</h1>
-  }
+  // if (!verfied) {
+  //   return <h1>Not verified</h1>
+  // }
   return (
     <Routes>
       <Route path="/#" element={<Home/>}/>
