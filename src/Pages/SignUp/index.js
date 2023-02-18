@@ -2,8 +2,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
@@ -12,7 +10,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import PersonIcon from '@mui/icons-material/Person';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function Copyright(props) {
   return (
@@ -29,12 +27,19 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function SignInSide() {
+export default function SignUp() {
   const [icon,setIcon] = useState(null)
+  const [lat, setLat] = useState(null)
+  const [lng,setLng] = useState(null)
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    if (lat && lng){
+      data.append("lng",lng)
+      data.append("lat",lat)
+    }
+
 
     fetch("/users",{
       method:"POST",
@@ -47,6 +52,21 @@ export default function SignInSide() {
     setIcon(URL.createObjectURL(file))
 
   }
+  
+  useEffect(()=> {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position)=> {
+          const {latitude, longitude} = position.coords
+          setLat(latitude)
+          setLng(longitude)
+      });
+    } else {
+      console.log("loc not enabled")
+      setLat(false)
+      setLng(false)
+    }
+  },[])
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -130,10 +150,6 @@ export default function SignInSide() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-              />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
               />
               <Button
                 type="submit"
