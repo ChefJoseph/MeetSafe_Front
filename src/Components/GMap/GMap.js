@@ -15,6 +15,7 @@ function GMap({
   width,
   height,
   nearby,
+  setNearby,
 }) {
   const [center, setCenter] = useState(origin);
   const [selectedMarker, setSelectedMarker] = useState(null);
@@ -27,7 +28,8 @@ function GMap({
     setDistance(null);
     setDuration(null);
     setSelectedMarker(null);
-  }, [nearby]);
+    setNearby({});
+  }, [midPoint]);
 
   useEffect(() => {
     if (midPoint) {
@@ -113,7 +115,12 @@ function GMap({
       options={options}
     >
       {origin ? <Marker position={origin} /> : null}
-      {}
+      {midPoint ? (
+        <Marker
+          position={midPoint}
+          icon={"https://img.icons8.com/fluency/48/null/centre-point.png"}
+        />
+      ) : null}
       {showMarkers}
       {selectedMarker ? (
         <InfoWindow

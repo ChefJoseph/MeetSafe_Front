@@ -58,6 +58,7 @@ function AddFormMapHolder({ map, setMap, origin, originAddress, midPoint }) {
         width={"100%"}
         height={"100vh"}
         nearby={nearby}
+        setNearby={setNearby}
       />
     </>
   );
