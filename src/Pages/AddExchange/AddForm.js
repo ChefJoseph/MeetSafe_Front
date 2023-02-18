@@ -13,9 +13,11 @@ import AddFormMapHolder from "./AddFormMapHolder";
 import useMidPointFinder from "../../CustomHooks/useMidPointFinder";
 import { LoadScript, Autocomplete } from "@react-google-maps/api";
 import { UserContext } from "../../Context/UserContext";
+import { MapContext } from "../../Context/MapContext";
 
 function AddForm() {
   const { currentUser } = useContext(UserContext);
+  const { isLoaded } = useContext(MapContext);
   const [timeValue, setTimeValue] = useState(dayjs(Date.now()));
   const [dateValue, setDateValue] = useState(dayjs(Date.now()));
   const [error, setError] = useState(null);
@@ -101,80 +103,86 @@ function AddForm() {
 
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-      <h1>Create an invite</h1>
-      {/* <h4>User Field</h4> */}
-      <input
-        ref={partyRef}
-        style={{
-          width: "100%",
-          height: "50px",
-          borderRadius: "5px",
-          borderWidth: "2px",
-        }}
-        placeholder={"username"}
-      ></input>
-      <Box>
-        <Button colorScheme="pink" type="submit" onClick={addParty}>
-          Add party
-        </Button>
-      </Box>
-      <h4>Description</h4>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <Stack spacing={1}>
-          <MobileDatePicker
-            label="Date"
-            value={dateValue}
-            onChange={(newValue) => {
-              setDateValue(newValue);
-            }}
-            renderInput={(params) => <TextField {...params} />}
-            minDate={dayjs(Date.now())}
-            onError={(newError) => {
-              setError(newError);
-              console.log(newError);
-            }}
-          />
-          <br />
-          <MobileTimePicker
-            label="Time"
-            value={timeValue}
-            onChange={(newValue) => {
-              setTimeValue(newValue);
-            }}
-            renderInput={(params) => <TextField {...params} />}
-            minTime={dayjs(Date.now())}
-            onError={(newError) => setError(newError)}
-          />
-        </Stack>
-      </LocalizationProvider>
-      <Box flexGrow={1} sx={{ marginTop: 3 }}>
-        <Autocomplete>
+      {isLoaded ? (
+        <>
+          <h1>Create an invite</h1>
+          {/* <h4>User Field</h4> */}
           <input
-            ref={originRef}
+            ref={partyRef}
             style={{
               width: "100%",
               height: "50px",
               borderRadius: "5px",
               borderWidth: "2px",
             }}
+            placeholder={"username"}
           ></input>
-        </Autocomplete>
-      </Box>
-      <Box>
-        <Button type="submit" onClick={updateOrigin}>
-          Update Origin
-        </Button>
-      </Box>
-      <AddFormMapHolder
-        map={map}
-        setMap={setMap}
-        origin={startCoor}
-        originAddress={address1}
-        midPoint={midPoint}
-        nearby={nearby}
-        setNearby={setNearby}
-      />
-      <Button>Send Invite</Button>
+          <Box>
+            <Button colorScheme="pink" type="submit" onClick={addParty}>
+              Add party
+            </Button>
+          </Box>
+          <h4>Description</h4>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Stack spacing={1}>
+              <MobileDatePicker
+                label="Date"
+                value={dateValue}
+                onChange={(newValue) => {
+                  setDateValue(newValue);
+                }}
+                renderInput={(params) => <TextField {...params} />}
+                minDate={dayjs(Date.now())}
+                onError={(newError) => {
+                  setError(newError);
+                  console.log(newError);
+                }}
+              />
+              <br />
+              <MobileTimePicker
+                label="Time"
+                value={timeValue}
+                onChange={(newValue) => {
+                  setTimeValue(newValue);
+                }}
+                renderInput={(params) => <TextField {...params} />}
+                minTime={dayjs(Date.now())}
+                onError={(newError) => setError(newError)}
+              />
+            </Stack>
+          </LocalizationProvider>
+          <Box flexGrow={1} sx={{ marginTop: 3 }}>
+            <Autocomplete>
+              <input
+                ref={originRef}
+                style={{
+                  width: "100%",
+                  height: "50px",
+                  borderRadius: "5px",
+                  borderWidth: "2px",
+                }}
+              ></input>
+            </Autocomplete>
+          </Box>
+          <Box>
+            <Button type="submit" onClick={updateOrigin}>
+              Update Origin
+            </Button>
+          </Box>
+          <AddFormMapHolder
+            map={map}
+            setMap={setMap}
+            origin={startCoor}
+            originAddress={address1}
+            midPoint={midPoint}
+            nearby={nearby}
+            setNearby={setNearby}
+          />
+          <Button>Send Invite</Button>
+        </>
+      ) : (
+        <h1>Loading...</h1>
+      )}
     </Box>
   );
 }
