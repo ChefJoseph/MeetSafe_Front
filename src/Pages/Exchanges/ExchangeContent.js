@@ -1,11 +1,16 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import ExchangeContext from '../../ExchangeProvider'
 import { Box, Button, TextField, Typography } from '@mui/material';
 import { GoogleMap, LoadScript } from '@react-google-maps/api';
 import { useParams } from 'react-router-dom';
 import { useCurrentLocation } from '../../CustomHooks/usecurrentlocation';
-// import TransitionsModal from './checkface';
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import Stack from "@mui/material/Stack";
+import dayjs from "dayjs";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
+import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
 
 const containerStyle = {
   width: '100%',
@@ -18,15 +23,17 @@ function ExchangeContent() {
 	const { exchange_id } = useParams()
 	const [lat,lng] = useCurrentLocation()
   const { exchanges } = useContext(ExchangeContext);
-  const currentExchange = exchanges.filter((exchange) => exchange.id == exchange_id);
+  const currentExchange = exchanges.filter((exchange) => exchange.id === exchange_id);
+  // console.log(exchange_id)
   console.log(currentExchange)
 	const [username, setUsername] = useState('John Doe');
-  const [date, setDate] = useState(new Date());
-  const [time, setTime] = useState(new Date());
-  const [details, setDetails] = useState('Jordan 3s size 10 Red/Black');
-  const [location, setLocation] = useState('123 Main St, Anytown USA');
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [details, setDetails] = useState('');
+  const [location, setLocation] = useState('');
 	const [editMode, setEditMode] = useState(false);
 	const [response, setResponse] = useState(null);
+	const [error, setError] = useState(null);
 
 	function handleLocation(e) {
     //Check against backend exchange to see if in range
@@ -43,6 +50,28 @@ function ExchangeContent() {
     }).then(resp=>resp.json()).then(data=>console.log(data))
   }
 	
+	useEffect(() => {
+		fetch('/exchanges/' + exchange_id, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+		})
+		.then(response => response.json())
+		.then(data => {
+			console.log(data.user, "/exchange get user")
+			console.log(data.user[1].username, "/exchange get username")
+			setUsername(data.user[1].username)
+			setDate(data.meettime)
+			setTime(data.meettime)
+			setDetails(data.details)
+			setLocation(data.meeting_address)
+		})
+		.catch(error => {
+			console.error(error);
+		});
+	});	
+
   const handleEditClick = () => {
     setEditMode(true);
   };
@@ -57,6 +86,7 @@ function ExchangeContent() {
 				meettime: date,
 				details: details,
 				meeting_address: location,
+
 			})
 		})
 		.then(response => response.json())
@@ -83,36 +113,50 @@ function ExchangeContent() {
 
   return (
     <>
-      <Box sx={{ p: 2 }}>
-        <Typography variant="h4">Exchange title</Typography>
+		<Box sx={{ p: 2 }}>
+      {/* <Typography variant="h4">Exchange title</Typography> */}
 
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, my: 2 }}>
-          <TextField
-            label="Username"
-            value={username}
-            disabled
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <TextField
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, my: 2 }}>
+			<Typography variant="h4">{username}</Typography>
+			<Typography variant="h8">Review rating</Typography>
+				<LocalizationProvider dateAdapter={AdapterDayjs}>
+        <Stack spacing={1}>
+          <MobileDatePicker
             label="Date"
             value={date}
-            disabled={!editMode}
-            onChange={(e) => setUsername(e.target.value)}
+						disabled={!editMode}
+            onChange={(newValue) => {
+              setDate(newValue);
+            }}
+            renderInput={(params) => <TextField {...params} />}
+            minDate={dayjs(Date.now())}
+            onError={(newError) => {
+              setError(newError);
+              console.log(newError);
+            }}
           />
-          <TextField
+          <br />
+          <MobileTimePicker
             label="Time"
             value={time}
-            disabled={!editMode}
-            onChange={(e) => setUsername(e.target.value)}
+						disabled={!editMode}
+            onChange={(newValue) => {
+              setTime(newValue);
+            }}
+            renderInput={(params) => <TextField {...params} />}
+            minTime={dayjs(Date.now())}
+            onError={(newError) => setError(newError)}
           />
-          <TextField
-            label="Details"
-            value={details}
-            multiline
-            rows={4}
-            disabled={!editMode}
-            onChange={(e) => setDetails(e.target.value)}
-          />
+        </Stack>
+      </LocalizationProvider>
+        <TextField
+          label="Details"
+          value={details}
+          multiline
+          rows={3}
+          disabled={!editMode}
+          onChange={(e) => setDetails(e.target.value)}
+        />
 
           <TextField
             label="Location"
@@ -152,7 +196,8 @@ function ExchangeContent() {
           )}
         </Box>
       </Box>
-    {/* <TransitionsModal open = {open} handleClose={handleClose}/> */}
+          {/* <TransitionsModal open = {open} handleClose={handleClose}/> */}
+
     </>
   )
 }
