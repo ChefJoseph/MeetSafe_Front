@@ -16,16 +16,16 @@ function App() {
   
   //Check if user is logged in 
 
-  useEffect(()=> {
-    fetch("/login").then(resp=> {
-      if (resp.ok) {
-        const userObj = resp.json()
-      }
-      else {
+  // useEffect(()=> {
+  //   fetch("/login").then(resp=> {
+  //     if (resp.ok) {
+  //       const userObj = resp.json()
+  //     }
+  //     else {
 
-      }
-    })
-  })
+  //     }
+  //   })
+  // })
   
   return (
     <Routes>
