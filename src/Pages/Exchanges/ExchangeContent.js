@@ -107,7 +107,12 @@ function ExchangeContent() {
 		})
   };
 
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   return (
+    <>
 		<Box sx={{ p: 2 }}>
       {/* <Typography variant="h4">Exchange title</Typography> */}
 
@@ -153,41 +158,47 @@ function ExchangeContent() {
           onChange={(e) => setDetails(e.target.value)}
         />
 
-        <TextField
-          label="Location"
-          value={location}
-          disabled={!editMode}
-          onChange={(e) => setLocation(e.target.value)}
-        />
-				<Typography>
-					<button onClick={handleLocation}>Here</button>
-				</Typography>
+          <TextField
+            label="Location"
+            value={location}
+            disabled={!editMode}
+            onChange={(e) => setLocation(e.target.value)}
+          />
+          <Typography>
+            <button onClick={handleLocation}>Here</button>
+          </Typography>
 
-        <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAP_API_KEY}>
-          <GoogleMap mapContainerStyle={containerStyle} center={{ lat: 37.7749, lng: -122.4194 }} zoom={10} />
-        </LoadScript>
+          <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAP_API_KEY}>
+            <GoogleMap mapContainerStyle={containerStyle} center={{ lat: 37.7749, lng: -122.4194 }} zoom={10} />
+          </LoadScript>
 
-        {editMode ? (
-          <Box sx={{ display: 'flex', gap: 2 }}>
-            <Button variant="contained" onClick={handleSaveClick}>
-              Save
-            </Button>
-            <Button variant="outlined" onClick={() => setEditMode(false)}>
-              Cancel
-            </Button>
-          </Box>
-        ) : (
-          <Box sx={{ display: 'flex', gap: 2 }}>
-            <Button variant="contained" onClick={handleEditClick}>
-              Edit
-            </Button>
-            <Button variant="contained" color="error" onClick={handleDeleteClick}>
-              Delete
-            </Button>
-          </Box>
-        )}
+          {editMode ? (
+            <Box sx={{ display: 'flex', gap: 2 }}>
+              <Button variant="contained" onClick={handleSaveClick}>
+                Save
+              </Button>
+              <Button variant="outlined" onClick={() => setEditMode(false)}>
+                Cancel
+              </Button>
+            </Box>
+          ) : (
+            <Box sx={{ display: 'flex', gap: 2 }}>
+              <Button variant="contained" onClick={handleEditClick}>
+                Edit
+              </Button>
+              <Button variant="contained" color="error" onClick={handleDeleteClick}>
+                Delete
+              </Button>
+              {/* <Button onClick={handleOpen} variant="contained" color="error">
+                Present
+              </Button> */}
+            </Box>
+          )}
+        </Box>
       </Box>
-    </Box>
+          {/* <TransitionsModal open = {open} handleClose={handleClose}/> */}
+
+    </>
   )
 }
 
