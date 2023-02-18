@@ -192,10 +192,10 @@ export default function Index({open, setOpen, handleDrawerClose, handlerDraweOpe
                 }}
               >
                 <Avatar key={exchange.id} 
-                sx={{ bgcolor: stringToColor(`${exchange.username}`) }}>
-                  {exchange.username}
+                sx={{ bgcolor: stringToColor(`${exchange.user[1].username}`) }}>
+                  {exchange.user[1].username.split(",")[0][0].toUpperCase()}
                 </Avatar>
-                <ListItemText primary={exchange.username} sx={{ textAlign: 'center', opacity: open ? 1 : 0 }} />
+                <ListItemText primary={exchange.user[1].username} sx={{ textAlign: 'center', opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
           ))}
