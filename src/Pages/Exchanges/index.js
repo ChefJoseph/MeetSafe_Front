@@ -1,29 +1,40 @@
-import React, { useContext } from 'react'
-import ExchangeContext from '../../ExchangeProvider'
-import { Toolbar, Typography } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import React, { useState } from 'react'
+
+import SideBar from '../../Components/SideBar'
+import NavBar from '../../Components/NavBar'
+import ExchangeContent from './ExchangeContent'
+import Box from '@mui/material/Box';
+import { CssBaseline } from '@mui/material';
 
 function Index() {
-  const { exchange_id } = useParams()
-  const { exchanges } = useContext(ExchangeContext);
-  const currentExchange = exchanges.filter((exchange) => exchange.id == exchange_id);
-  // console.log(exchange_id)
-  console.log(currentExchange)
+  const [open, setOpen] = useState(false);
+
+  const handleDrawerOpen = () => {
+    setOpen(!open);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
 
   return (
-    <main >
-      <Toolbar />
-      {currentExchange ? (
-        <div>
-          <Typography variant="h4" component="h1">
-           {currentExchange.id}
-            </Typography>
-            <p>Exchange content goes here</p>
-        </div>
-      ) : (
-        <p>No exchange selected</p>
-      )}
-    </main>
+  <Box component="main" sx={{ flexGrow: 1, p: 3, ml: 5, height: "90vh" }}>
+    <CssBaseline />
+    <SideBar
+      open={open}
+      setOpen={setOpen}
+      handleDrawerClose={handleDrawerClose}
+      handleDrawerOpen={handleDrawerOpen}
+    />
+    <ExchangeContent />
+    <NavBar
+      open={open}
+      setOpen={setOpen}
+      handleDrawerClose={handleDrawerClose}
+      handleDrawerOpen={handleDrawerOpen}
+    />
+  </Box>
   );
 }
 
