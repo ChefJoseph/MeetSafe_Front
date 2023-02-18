@@ -5,7 +5,8 @@ import {
   InfoWindow,
   DirectionsRenderer,
 } from "@react-google-maps/api";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { MapContext } from "../../Context/MapContext";
 
 function GMap({
   setMap,
@@ -16,6 +17,7 @@ function GMap({
   height,
   nearby,
 }) {
+  const { isLoaded, loadError } = useContext(MapContext);
   const [center, setCenter] = useState(origin);
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [directionsResponse, setDirectionsResponse] = useState(null);
@@ -50,10 +52,10 @@ function GMap({
     zoomControl: true,
   };
 
-  const { isLoaded, loadError } = useJsApiLoader({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
-    libraries: ["places"],
-  });
+  // const { isLoaded, loadError } = useJsApiLoader({
+  //   googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
+  //   libraries: ["places"],
+  // });
 
   const showMarkers = nearby.data
     ? nearby.data.slice(0, 5).map((marker) => (
