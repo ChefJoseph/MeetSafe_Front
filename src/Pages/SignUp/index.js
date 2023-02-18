@@ -39,6 +39,7 @@ export default function SignUp() {
   const { setCurrentUser } = useContext(UserContext);
 
 
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);

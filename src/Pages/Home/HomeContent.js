@@ -3,9 +3,11 @@ import Box from "@mui/material/Box";
 import GMap from "../../Components/GMap/GMap";
 import { Button } from "@mui/material";
 import { UserContext } from "../../Context/UserContext";
+import { MapContext } from "../../Context/MapContext";
 
 function HomeContent() {
   const { currentUser, setCurrentUser } = useContext(UserContext);
+  const { isLoaded } = useContext(MapContext);
   const [map, setMap] = useState(/** @type google.maps.Map */ (null));
   const [center, setCenter] = useState(null);
   // user home location
@@ -30,7 +32,7 @@ function HomeContent() {
 
   return (
     <Box sx={{ height: "100%", width: "100%" }}>
-      {center ? (
+      {center && isLoaded ? (
         <>
           <Button onClick={() => map.panTo(center)}>Back to Center</Button>
           <GMap
