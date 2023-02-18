@@ -4,6 +4,7 @@ import ExchangeContext from '../../ExchangeProvider'
 import { Box, Button, TextField, Typography } from '@mui/material';
 import { GoogleMap, LoadScript } from '@react-google-maps/api';
 import { useParams } from 'react-router-dom';
+import { useCurrentLocation } from '../../CustomHooks/usecurrentlocation';
 
 const containerStyle = {
   width: '100%',
@@ -14,6 +15,7 @@ const containerStyle = {
 function ExchangeContent() {
 	const navigate = useNavigate();
 	const { exchange_id } = useParams()
+	const [lat,lng] = useCurrentLocation()
   const { exchanges } = useContext(ExchangeContext);
   const currentExchange = exchanges.filter((exchange) => exchange.id == exchange_id);
   // console.log(exchange_id)
@@ -26,6 +28,21 @@ function ExchangeContent() {
 	const [editMode, setEditMode] = useState(false);
 	const [response, setResponse] = useState(null);
 
+	function handleLocation(e) {
+    //Check against backend exchange to see if in range
+    fetch("/exchanges/location",{
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        "lat":lat,
+        "lng":lng,
+        "exchange_id":exchange_id
+      })
+    }).then(resp=>resp.json()).then(data=>console.log(data))
+  }
+	
   const handleEditClick = () => {
     setEditMode(true);
   };
@@ -98,6 +115,9 @@ function ExchangeContent() {
           disabled={!editMode}
           onChange={(e) => setLocation(e.target.value)}
         />
+				<Typography>
+					<button onClick={handleLocation}>Here</button>
+				</Typography>
 
         <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAP_API_KEY}>
           <GoogleMap mapContainerStyle={containerStyle} center={{ lat: 37.7749, lng: -122.4194 }} zoom={10} />
