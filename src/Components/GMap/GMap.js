@@ -15,7 +15,6 @@ function GMap({
   width,
   height,
   nearby,
-  setNearby,
 }) {
   const [center, setCenter] = useState(origin);
   const [selectedMarker, setSelectedMarker] = useState(null);
@@ -28,7 +27,6 @@ function GMap({
     setDistance(null);
     setDuration(null);
     setSelectedMarker(null);
-    setNearby({});
   }, [midPoint]);
 
   useEffect(() => {

@@ -35,6 +35,7 @@ function AddForm() {
   // states and function for map
   const originRef = useRef();
   const [map, setMap] = useState(/** @type google.maps.Map */ (null));
+  const [nearby, setNearby] = useState({});
   const [midPoint, findMidPoint, findCoordinate] = useMidPointFinder();
 
   function updateOrigin() {
@@ -48,6 +49,7 @@ function AddForm() {
         console.log("updating origin", data);
         setStartCoor(data.results[0].geometry.location);
         setAddress1(originRef.current.value);
+        setNearby({});
       });
   }
 
@@ -132,6 +134,8 @@ function AddForm() {
         origin={startCoor}
         originAddress={address1}
         midPoint={midPoint}
+        nearby={nearby}
+        setNearby={setNearby}
       />
       <Button>Send Invite</Button>
     </Box>
