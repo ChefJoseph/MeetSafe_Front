@@ -17,12 +17,6 @@ function App() {
   const { setCurrentUser } = useContext(UserContext);
   const navigate = useNavigate()
 
-
-  // useEffect(()=> {
-
-  // })
-  //Check if user is logged in 
-
   useEffect(()=> {
     fetch("/auth").then(resp=> resp.json()).then( userObj =>
       {
