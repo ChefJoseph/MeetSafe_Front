@@ -9,14 +9,12 @@ import Exchanges from './Pages/Exchanges'
 import History from './Pages/History'
 import Notifications from './Pages/Notifications'
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import { useContext } from 'react';
 import { UserContext } from './Context/UserContext';
 import { useNavigate } from 'react-router-dom';
 
 function App() {
   const { setCurrentUser } = useContext(UserContext);
-  const [verfied,setverified] = useState(false)
   const navigate = useNavigate()
 
 
@@ -33,19 +31,14 @@ function App() {
             navigate("/home")
           }
           else {
-            setverified(true)
             navigate("/login")
           }
         }
-    ).catch(data=>{
-      setverified(true)
+    ).catch(()=>{
       navigate("/login")
     })
   },[])
   
-  if (!verfied) {
-    return <h1>Not verified</h1>
-  }
   return (
     <Routes>
       <Route path="/#" element={<Home/>}/>
