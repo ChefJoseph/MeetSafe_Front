@@ -43,7 +43,7 @@ export default function LogIn() {
       method:"POST",
       body: data,
     }).then(resp=>resp.json()).then(userObj=>{
-      console.log(userObj)
+      console.log(userObj, "userObj /Login")
       if (!userObj.errors || !userObj.error) {
         setCurrentUser(userObj)
         navigate("/home")

@@ -50,7 +50,6 @@ function GMap({
 
   const options = {
     disableDefaultUI: true,
-    zoomControl: true,
   };
 
   // const { isLoaded, loadError } = useJsApiLoader({
@@ -80,7 +79,10 @@ function GMap({
               lat: marker.geometry.location.lat,
               lng: marker.geometry.location.lng,
             });
-            calculateRoute(marker.vicinity);
+            calculateRoute({
+              lat: marker.geometry.location.lat,
+              lng: marker.geometry.location.lng,
+            });
           }}
         />
       ))
@@ -88,13 +90,13 @@ function GMap({
 
   // directions
   async function calculateRoute(destination) {
-    if (originAddress === "" || destination === "") {
+    if (!origin || !destination) {
       return;
     }
     // eslint-disable-next-line no-undef
     const directionsService = new google.maps.DirectionsService();
     const results = await directionsService.route({
-      origin: originAddress,
+      origin: origin,
       destination: destination,
       // eslint-disable-next-line no-undef
       travelMode: google.maps.TravelMode.DRIVING,
