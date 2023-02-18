@@ -163,8 +163,23 @@ export default function Index({open, setOpen, handleDrawerClose, handlerDraweOpe
         <Divider />
         
         <Stack id="AvatarStack" direction="column" spacing={1} sx={{ display: "flex",justifyContent:'center', alignItems: "center", mt:1, mb:1 }}>
+          {/* Sort and then map */}
+          {exchanges?.sort((a,b)=> {
+            const datea = new Date(a)
+            const dateb = new Date(b)
 
-          {exchanges?.map((exchange, index) => (
+            const amil = datea.getTime()
+            const bmil = dateb.getTime()
+
+            if (amil > bmil) {
+              return 1
+            }
+            if (amil < bmil) {
+              return -1
+            }
+            return 0 
+
+          }).map( exchange => (
             <ListItem key={exchange.id} 
             disablePadding 
             sx={{ display: 'block' }}

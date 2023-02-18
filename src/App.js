@@ -8,8 +8,24 @@ import AddExchange from './Pages/AddExchange'
 import Exchanges from './Pages/Exchanges'
 import History from './Pages/History'
 import Notifications from './Pages/Notifications'
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+
 
 function App() {
+  
+  //Check if user is logged in 
+
+  useEffect(()=> {
+    fetch("/login").then(resp=> {
+      if (resp.ok) {
+        const userObj = resp.json()
+      }
+      else {
+
+      }
+    })
+  })
   
   return (
     <Routes>

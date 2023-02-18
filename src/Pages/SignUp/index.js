@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import PersonIcon from '@mui/icons-material/Person';
 import { useEffect, useState } from 'react';
+import { useCurrentLocation } from '../../CustomHooks/usecurrentlocation';
 
 function Copyright(props) {
   return (
@@ -30,8 +31,8 @@ const theme = createTheme();
 
 export default function SignUp() {
   const [icon,setIcon] = useState(null)
-  const [lat, setLat] = useState(null)
-  const [lng,setLng] = useState(null)
+  const [lat,lng] = useCurrentLocation()
+
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -54,21 +55,6 @@ export default function SignUp() {
 
   }
   
-  useEffect(()=> {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position)=> {
-          const {latitude, longitude} = position.coords
-          setLat(latitude)
-          setLng(longitude)
-      });
-    } else {
-      console.log("loc not enabled")
-      setLat(false)
-      setLng(false)
-    }
-  },[])
-
-
   return (
     <ThemeProvider theme={theme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
