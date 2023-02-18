@@ -10,6 +10,7 @@ function AddFormMapHolder({
   midPoint,
   nearby,
   setNearby,
+  setMeetAddress,
 }) {
   function searchNearby(type) {
     if (map && midPoint.lat !== undefined && midPoint.lng !== undefined) {
@@ -64,6 +65,7 @@ function AddFormMapHolder({
         width={"100%"}
         height={"100vh"}
         nearby={nearby}
+        setMeetAddress={setMeetAddress}
       />
     </>
   );

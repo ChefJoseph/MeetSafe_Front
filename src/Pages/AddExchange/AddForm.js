@@ -11,9 +11,10 @@ import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
 import Button from "@mui/material/Button";
 import AddFormMapHolder from "./AddFormMapHolder";
 import useMidPointFinder from "../../CustomHooks/useMidPointFinder";
-import { LoadScript, Autocomplete } from "@react-google-maps/api";
+import { Autocomplete } from "@react-google-maps/api";
 import { UserContext } from "../../Context/UserContext";
 import { MapContext } from "../../Context/MapContext";
+import moment from "moment";
 
 function AddForm() {
   const { currentUser } = useContext(UserContext);
@@ -24,9 +25,11 @@ function AddForm() {
   const [startCoor, setStartCoor] = useState(null);
   const [endCoor, setEndCoor] = useState(null);
   const [address1, setAddress1] = useState(null);
+  const [meetAddress, setMeetAddress] = useState(null);
 
   // ref for party input
   const partyRef = useRef();
+  const descriptionRef = useRef();
 
   // states and function for map
   const originRef = useRef();
@@ -66,6 +69,33 @@ function AddForm() {
         setAddress1(originRef.current.value);
         setNearby({});
       });
+  }
+
+  function sendInvite() {
+    if (!midPoint) {
+      alert("please pick a party");
+    } else if (!meetAddress) {
+      alert("please pick a meeting location");
+    } else {
+      const day = new Date(dateValue);
+      const time = new Date(timeValue);
+
+      const dayString =
+        day.getMonth() + 1 + "-" + day.getDate() + "-" + day.getFullYear();
+
+      const timeString = time.getHours() + ":" + time.getMinutes();
+
+      const data = {
+        address1_1: address1,
+        address_1_lat: startCoor.lat,
+        address_1_lng: startCoor.lng,
+        address_2_lat: endCoor.lat,
+        address_2_lng: endCoor.lng,
+        ...meetAddress,
+        meettime: dayString + " " + timeString,
+      };
+      console.log(data);
+    }
   }
 
   useEffect(() => {
@@ -122,7 +152,18 @@ function AddForm() {
               Add party
             </Button>
           </Box>
-          <h4>Description</h4>
+          {/* <h4>Description</h4> */}
+          <textarea
+            ref={descriptionRef}
+            style={{
+              width: "100%",
+              height: "100px",
+              borderRadius: "5px",
+              borderWidth: "2px",
+              marginBottom: "10px",
+            }}
+            placeholder={"Description"}
+          ></textarea>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Stack spacing={1}>
               <MobileDatePicker
@@ -169,6 +210,16 @@ function AddForm() {
               Update Origin
             </Button>
           </Box>
+          <Box>
+            {meetAddress ? (
+              <>
+                <p>Meeting address: </p>
+                <p>{meetAddress.meeting_address}</p>
+              </>
+            ) : (
+              <p>Please select a meeting location</p>
+            )}
+          </Box>
           <AddFormMapHolder
             map={map}
             setMap={setMap}
@@ -177,8 +228,9 @@ function AddForm() {
             midPoint={midPoint}
             nearby={nearby}
             setNearby={setNearby}
+            setMeetAddress={setMeetAddress}
           />
-          <Button>Send Invite</Button>
+          <Button onClick={sendInvite}>Send Invite</Button>
         </>
       ) : (
         <h1>Loading...</h1>
