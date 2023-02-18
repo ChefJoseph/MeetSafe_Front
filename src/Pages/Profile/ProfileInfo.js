@@ -1,5 +1,6 @@
-import React from 'react'
-import { Box } from '@mui/material'
+import React from "react";
+import { Box } from "@mui/material";
+import AddressUpdateForm from "./AddressUpdateForm";
 
 function ProfileInfo() {
   return (
@@ -8,8 +9,9 @@ function ProfileInfo() {
       <h4>Username</h4>
       <h4>E-mail</h4>
       <h4>Default Address</h4>
+      <AddressUpdateForm />
     </Box>
-  )
+  );
 }
 
-export default ProfileInfo
+export default ProfileInfo;

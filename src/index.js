@@ -4,13 +4,15 @@ import { BrowserRouter } from 'react-router-dom';
 import './index.css';
 import App from './App';
 import { ExchangeProvider } from './ExchangeProvider';
+import UserContextProvider from "./Context/UserContext";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
+    <UserContextProvider>
     <ExchangeProvider>
-      <App />
+        <App />
     </ExchangeProvider>
+    </UserContextProvider>
   </BrowserRouter>
 );
-
