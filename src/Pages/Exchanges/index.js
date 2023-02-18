@@ -19,6 +19,8 @@ function Index() {
            {currentExchange.id}
             </Typography>
             <p>Exchange content goes here</p>
+            <p> Chat should be here</p>
+            <p> Map which is centered on meetup location </p>
         </div>
       ) : (
         <p>No exchange selected</p>

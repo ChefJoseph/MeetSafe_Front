@@ -7,6 +7,8 @@ import { CssBaseline } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 
+//Get from context and display
+
 function Index() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate()
