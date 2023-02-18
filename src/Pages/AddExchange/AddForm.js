@@ -124,7 +124,7 @@ function AddForm() {
         </Autocomplete>
       </Box>
       <Box>
-        <Button colorScheme="pink" type="submit" onClick={updateOrigin}>
+        <Button type="submit" onClick={updateOrigin}>
           Update Origin
         </Button>
       </Box>
