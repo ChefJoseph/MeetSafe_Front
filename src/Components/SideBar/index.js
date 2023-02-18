@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useContext, createContext, useEffect } from "react";
+import ExchangeContext from '../../ExchangeProvider'
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -18,7 +19,6 @@ import ClickAwayListener from '@mui/base/ClickAwayListener';
 
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
-
 
 const drawerWidth = 150;
 
@@ -52,23 +52,6 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   ...theme.mixins.toolbar,
 }));
 
-// const AppBar = styled(MuiAppBar, {
-//   shouldForwardProp: (prop) => prop !== 'open',
-// })(({ theme, open }) => ({
-//   zIndex: theme.zIndex.drawer + 1,
-//   transition: theme.transitions.create(['width', 'margin'], {
-//     easing: theme.transitions.easing.sharp,
-//     duration: theme.transitions.duration.leavingScreen,
-//   }),
-//   ...(open && {
-//     marginLeft: drawerWidth,
-//     width: `calc(100% - ${drawerWidth}px)`,
-//     transition: theme.transitions.create(['width', 'margin'], {
-//       easing: theme.transitions.easing.sharp,
-//       duration: theme.transitions.duration.enteringScreen,
-//     }),
-//   }),
-// }));
 
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
@@ -125,12 +108,19 @@ export default function Index({open, setOpen, handleDrawerClose, handlerDraweOpe
   const handleHome = () => {
     navigate("/home");
   };
+  const { exchanges, setExchanges, addExchange, removeExchange, selectExchange, selectedExchange } = useContext(ExchangeContext);
+  const [newExchangeName, setNewExchangeName] = useState("");
 
   const handleClickAway = () => {
     if (open) {
       setOpen(false);
     }
   };
+
+  function handleSelectExchange(ExchangeId) {
+    selectExchange(ExchangeId);
+    navigate("/exchange/"+ExchangeId)
+  }
   console.log(open, "SideBar/AppBar.js");
 
   //   const handleDrawerOpen = () => {
@@ -140,6 +130,19 @@ export default function Index({open, setOpen, handleDrawerClose, handlerDraweOpe
   //   const handleDrawerClose = () => {
   //     setOpen(false);
   //   };
+
+  useEffect(() => {
+    fetch('/exchanges')
+      .then((res) => {
+        if (res.ok) {
+          res.json()
+            .then((data) => {
+              setExchanges(data)
+              console.log(data, "sidebar exchanges")
+            });
+        }
+      });
+  }, []);
 
   return (
     // <ClickAwayListener onClickAway={handleClickAway} mouseEvent="onMouseDown" touchEvent="onTouchStart">
@@ -158,86 +161,53 @@ export default function Index({open, setOpen, handleDrawerClose, handlerDraweOpe
           </IconButton>
         </DrawerHeader>
         <Divider />
-        {/* <List>
-          {['Stacy', 'Jeffrey', 'Jamal', 'Diana'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  <EmojiEmotionsOutlinedIcon />
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List> */}
         
         <Stack id="AvatarStack" direction="column" spacing={1} sx={{ display: "flex",justifyContent:'center', alignItems: "center", mt:1, mb:1 }}>
-          {['Stacy', 'Jeffrey', 'Jamal', 'Diana'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-            <ListItemButton
-              sx={{
-                justifyContent:'center',
-               
-              }}
+          {/* Sort and then map */}
+          {exchanges?.sort((a,b)=> {
+            const datea = new Date(a)
+            const dateb = new Date(b)
+
+            const amil = datea.getTime()
+            const bmil = dateb.getTime()
+
+            if (amil > bmil) {
+              return 1
+            }
+            if (amil < bmil) {
+              return -1
+            }
+            return 0 
+
+          }).map( exchange => (
+            <ListItem key={exchange.id} 
+            disablePadding 
+            sx={{ display: 'block' }}
+            selected={exchange.id === selectedExchange}
+            onClick={() => handleSelectExchange(exchange.id)}
             >
-              <Avatar key={text} sx={{ bgcolor: stringToColor(`${text}`) }}>{text.split(",")[0][0]}</Avatar>
-            <ListItemText primary={text} sx={{ textAlign: 'center', opacity: open ? 1 : 0 }} />
-            </ListItemButton>
+              <ListItemButton
+                sx={{
+                  justifyContent:'center', 
+                }}
+              >
+                <Avatar key={exchange.id} 
+                sx={{ bgcolor: stringToColor(`${exchange.username}`) }}>
+                  {exchange.username}
+                </Avatar>
+                <ListItemText primary={exchange.username} sx={{ textAlign: 'center', opacity: open ? 1 : 0 }} />
+              </ListItemButton>
             </ListItem>
           ))}
         </Stack>
 
         <Divider />
-        {/* <List sx={{justifyContent: 'space-between'}}>
-          {['Ipsum'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  <EmojiEmotionsOutlinedIcon />
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-          
-        </List> */}
+
         <IconButton onClick={handleHome} sx={{left: 0, bottom: 0,  opacity: open ? 1 : 0}}>
           <img src={MeetSafeLogo} alt="logo" />
         </IconButton>
       </Drawer>
-      {/* <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <DrawerHeader />
-        <Typography paragraph>
-         Maps maps maps maps maps Maps maps maps maps maps Maps maps maps maps maps Maps maps maps maps maps Maps maps maps maps maps Maps maps maps maps maps Maps maps maps maps maps Maps maps maps maps maps Maps maps maps maps maps Maps maps maps maps maps Maps maps maps maps maps Maps maps maps maps maps Maps maps maps maps  
-        </Typography>
-        <Typography paragraph>
-       Details and chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat chat  
-        </Typography> 
-      </Box> */}
+
     </Box>
     // </div>
     // </ClickAwayListener>

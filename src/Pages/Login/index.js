@@ -11,6 +11,7 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Link as RouteLink } from 'react-router-dom';
 
 function Copyright(props) {
   return (
@@ -107,9 +108,9 @@ export default function LogIn() {
               </Button>
               <Grid container>
                 <Grid item>
-                  <Link href="#" variant="body2">
+                  <RouteLink to = "/signup">
                     {"Dont have an account? Sign Up"}
-                  </Link>
+                  </RouteLink>
                 </Grid>
               </Grid>
               <Copyright sx={{ mt: 5 }} />
