@@ -32,23 +32,36 @@ function AddForm() {
   const [address2, setAddress2] = useState("89 E 42nd St New York NY");
 
   // states and function for map
+  const originRef = useRef();
   const [map, setMap] = useState(/** @type google.maps.Map */ (null));
-  const [findMidPoint] = useMidPointFinder(
-    // user lat lng from database
-    startCoor,
-    // invite target lat lng from database
-    endCoor,
-    address1,
-    address2
-  );
-  // const [findMidPoint] = useMidPointFinder({}, {}, address1, address2);
-  const [midPoint, setMidPoint] = useState({});
+  const [midPoint, findMidPoint, findCoordinate] = useMidPointFinder();
 
-  function checkMidPoint() {
-    const mid = findMidPoint();
-    console.log(mid);
-    setMidPoint(mid);
+  function updateOrigin() {
+    fetch(
+      `https://maps.googleapis.com/maps/api/geocode/json?address=${originRef.current.value
+        .split(" ")
+        .join("+")}&key=${process.env.REACT_APP_GOOGLE_MAP_API_KEY}`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("updating origin", data);
+        setStartCoor(data.results[0].geometry.location);
+        setAddress1(originRef.current.value);
+      });
   }
+
+  useEffect(() => {
+    if (!startCoor || !endCoor) {
+      if (!startCoor) {
+        findCoordinate(address1, setStartCoor);
+      }
+      if (!endCoor) {
+        findCoordinate(address2, setEndCoor);
+      }
+    } else {
+      findMidPoint(startCoor, endCoor);
+    }
+  }, [startCoor, endCoor]);
 
   const DrawerHeader = styled("div")(({ theme }) => ({
     display: "flex",
@@ -59,7 +72,7 @@ function AddForm() {
     ...theme.mixins.toolbar,
   }));
 
-  console.log(error, "addform time error")
+  console.log(error, "addform time error");
 
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
@@ -74,11 +87,11 @@ function AddForm() {
             onChange={(newValue) => {
               setDateValue(newValue);
             }}
-            renderInput={(params) => <TextField {...params}/>}
+            renderInput={(params) => <TextField {...params} />}
             minDate={dayjs(Date.now())}
             onError={(newError) => {
-              setError(newError)
-              console.log(newError)
+              setError(newError);
+              console.log(newError);
             }}
           />
           <br />
@@ -94,13 +107,21 @@ function AddForm() {
           />
         </Stack>
       </LocalizationProvider>
-      <Box flexGrow={1} sx={{ padding: 1 }}>
-        {/* <Autocomplete> */}
-        <TextField variant="outlined" type="text" placeholder="Origin" />
-        {/* </Autocomplete> */}
+      <Box flexGrow={1} sx={{ marginTop: 3 }}>
+        <Autocomplete>
+          <input
+            ref={originRef}
+            style={{
+              width: "100%",
+              height: "50px",
+              borderRadius: "5px",
+              borderWidth: "2px",
+            }}
+          ></input>
+        </Autocomplete>
       </Box>
       <Box>
-        <Button colorScheme="pink" type="submit">
+        <Button colorScheme="pink" type="submit" onClick={updateOrigin}>
           Update Origin
         </Button>
       </Box>
@@ -108,11 +129,9 @@ function AddForm() {
         map={map}
         setMap={setMap}
         origin={startCoor}
+        originAddress={address1}
         midPoint={midPoint}
       />
-      <Box>
-        <Button onClick={checkMidPoint}>Test MidPoint</Button>
-      </Box>
       <Button>Send Invite</Button>
     </Box>
   );
