@@ -16,6 +16,7 @@ function GMap({
   width,
   height,
   nearby,
+  setMeetAddress,
 }) {
   const { isLoaded, loadError } = useContext(MapContext);
   const [center, setCenter] = useState(origin);
@@ -103,6 +104,15 @@ function GMap({
     setDuration(results.routes[0].legs[0].duration.text);
   }
 
+  function pickLocation() {
+    const meetLocation = {
+      meeting_address: selectedMarker.vicinity,
+      meeting_address_lat: selectedMarker.geometry.location.lat,
+      meeting_address_lng: selectedMarker.geometry.location.lng,
+    };
+    setMeetAddress(meetLocation);
+  }
+
   if (loadError) return <div>Error Loading map!</div>;
   if (!isLoaded) return <div>Loading...</div>;
 
@@ -143,7 +153,7 @@ function GMap({
             ) : null}
             {distance ? <p>Distance: {distance}</p> : null}
             {duration ? <p>Time needed: {duration}</p> : null}
-            <button className="text-blue-600 underline" onClick={() => {}}>
+            <button className="text-blue-600 underline" onClick={pickLocation}>
               Select Location
             </button>
           </div>
