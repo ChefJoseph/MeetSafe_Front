@@ -10,7 +10,7 @@ import History from './Pages/History'
 import Notifications from './Pages/Notifications'
 
 function App() {
-  
+
   return (
     <Routes>
       <Route path="/#" element={<Home/>}/>

@@ -32,6 +32,7 @@ export default function SignUp() {
   const [lat, setLat] = useState(null)
   const [lng,setLng] = useState(null)
 
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
