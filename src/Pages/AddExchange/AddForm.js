@@ -165,13 +165,9 @@ function AddForm() {
             {/* <Grid container spacing={2}>
             <Grid item xs={6}> */}
             <h1>Create an invite</h1>
-            {/* <TextField
-                ref={partyRef}
-                label="Username"
-              /> */}
             <input
               ref={partyRef}
-              style={{ width: "100%", height: "50px", borderRadius: "5px" }}
+              style={{ width: "100%", height: "50px", borderRadius: "5px", borderWidth: '1px' }}
               placeholder={"Username"}
             ></input>
             <Box>
@@ -179,17 +175,17 @@ function AddForm() {
                 Add party
               </Button>
             </Box>
-            {/* <TextField
-                ref={descriptionRef}
-                label="Description"
-                multiline
-                rows={3}
-              /> */}
-            <textarea
-              ref={descriptionRef}
-              style={{ width: "100%", height: "50px", borderRadius: "5px" }}
-              placeholder={"Description"}
-            ></textarea>
+            <input
+            ref={descriptionRef}
+            style={{
+              width: "100%",
+              height: "50px",
+              borderRadius: "5px",
+              borderWidth: '1px',
+              borderColor: 'rgb 0 0 0 0.36'
+            }}
+            placeholder={"Description"}
+            ></input>
 
             <LocalizationProvider dateAdapter={AdapterDayjs} sx={{ mt: 2 }}>
               <Stack spacing={0}>
@@ -221,17 +217,14 @@ function AddForm() {
             </LocalizationProvider>
             <Box flexGrow={1} sx={{ marginTop: 1 }}>
               <Autocomplete id="autocomplete">
-                {/* <TextField
-                    ref={originRef}
-                    label="Your address"
-                    sx={{ width: "100%" }}
-                  /> */}
-                <input
+              <input
                   ref={originRef}
                   style={{
                     width: "100%",
                     height: "50px",
                     borderRadius: "5px",
+                    borderWidth: '1px',
+                    borderColor: 'rgb 0 0 0 0.36'
                   }}
                   placeholder={"Your Address"}
                 ></input>
