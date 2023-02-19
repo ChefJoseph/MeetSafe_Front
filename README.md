@@ -1,3 +1,4 @@
+<a href="https://github.com/AlexTaylorCoder/MeetSafe-Backend"> Backend Repository</a>
 ## Inspiration
 
 Our app was inspired by the growing concern for overconsumption and waste, and the increasing focus on recycling, reusing, and reducing waste in our daily lives. We recognized the potential for bartering and reusing items as a way to reduce waste and help alleviate supply chain issues. However, we also understand the risks involved in meeting with strangers for these transactions. Thus, we aimed to create a safe and secure platform for resellers to connect with buyers and reduce waste in a responsible and sustainable way. With our app, users can make meaningful and eco-friendly transactions, while also ensuring their safety and privacy.
