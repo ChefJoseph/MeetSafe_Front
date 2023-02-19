@@ -14,8 +14,10 @@ import useMidPointFinder from "../../CustomHooks/useMidPointFinder";
 import { Autocomplete } from "@react-google-maps/api";
 import { UserContext } from "../../Context/UserContext";
 import { MapContext } from "../../Context/MapContext";
+import { useNavigate } from "react-router-dom";
 
 function AddForm() {
+  const navigate = useNavigate();
   const { currentUser } = useContext(UserContext);
   const { isLoaded } = useContext(MapContext);
   const [timeValue, setTimeValue] = useState(dayjs(Date.now()));
@@ -115,7 +117,7 @@ function AddForm() {
         body: JSON.stringify(data),
       })
         .then((res) => res.json())
-        .then(console.log);
+        .then(() => navigate("/"));
     }
   }
 
