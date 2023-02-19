@@ -2,8 +2,13 @@ import { Button, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import { useState } from "react";
 import { useCurrentLocation } from "../../CustomHooks/usecurrentlocation";
+import { useContext } from "react";
+import { UserContext } from "../../Context/UserContext";
 
 function AddressUpdateForm() {
+
+  const { currentUser } = useContext(UserContext);
+
   const [lat,lng] = useCurrentLocation()
   
   const [formInput, setFormInput] = useState({
@@ -43,7 +48,7 @@ function AddressUpdateForm() {
         .then((res) => res.json())
         .then((data) => {
           console.log("finding coordinates", data);
-          fetch(`/users/{user.id}`, {
+          fetch(`/users/${currentUser.id}`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
