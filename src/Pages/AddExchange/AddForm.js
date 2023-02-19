@@ -14,6 +14,7 @@ import useMidPointFinder from "../../CustomHooks/useMidPointFinder";
 import { Autocomplete } from "@react-google-maps/api";
 import { UserContext } from "../../Context/UserContext";
 import { MapContext } from "../../Context/MapContext";
+import Typography from '@mui/material/Typography';
 
 function AddForm() {
   const { currentUser } = useContext(UserContext);
