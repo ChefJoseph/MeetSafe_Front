@@ -5,7 +5,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Stack from "@mui/material/Stack";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { Input, TextField } from "@mui/material";
+import { Grid, Input, TextField, Typography } from "@mui/material";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
 import Button from "@mui/material/Button";
@@ -14,10 +14,10 @@ import useMidPointFinder from "../../CustomHooks/useMidPointFinder";
 import { Autocomplete } from "@react-google-maps/api";
 import { UserContext } from "../../Context/UserContext";
 import { MapContext } from "../../Context/MapContext";
-import Grid from "@mui/material/Grid";
-// import { Typography } from "@mui/material/styles/createTypography";
+import { useNavigate } from "react-router-dom";
 
 function AddForm() {
+  const navigate = useNavigate();
   const { currentUser } = useContext(UserContext);
   const { isLoaded } = useContext(MapContext);
   const [timeValue, setTimeValue] = useState(dayjs(Date.now()));
@@ -41,6 +41,10 @@ function AddForm() {
 
   function addParty() {
     if (partyRef.current.value) {
+      if (partyRef.current.value === currentUser.username) {
+        alert("Cannot add yourself");
+        return;
+      }
       fetch(`users/find/${partyRef.current.value}`)
         .then((res) => res.json())
         .then((data) => {
@@ -84,24 +88,36 @@ function AddForm() {
     } else {
       const day = new Date(dateValue);
       const time = new Date(timeValue);
+      console.log(dateValue);
+      console.log(timeValue);
 
       const dayString =
         day.getMonth() + 1 + "-" + day.getDate() + "-" + day.getFullYear();
 
       const timeString = time.getHours() + ":" + time.getMinutes();
 
+      const datetime = new Date(dayString + " " + timeString);
+
       const data = {
-        target_party: targetParty,
-        address1_1: address1,
+        address_1: address1,
         address_1_lat: startCoor.lat,
         address_1_lng: startCoor.lng,
         address_2_lat: endCoor.lat,
         address_2_lng: endCoor.lng,
         ...meetAddress,
-        meettime: dayString + " " + timeString,
+        meettime: datetime,
         details: descriptionRef.current.value,
       };
-      console.log(data, "Add form");
+      console.log(data);
+      fetch(`/exchanges/new_meeting/${targetParty}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((res) => res.json())
+        .then(() => navigate("/"));
     }
   }
 
@@ -139,90 +155,94 @@ function AddForm() {
   console.log(error, "addform time error");
 
   return (
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+    <Box sx={{ display: "flex", justifyContent: "center" }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, maxWidth: "700px" }}>
         {isLoaded ? (
-
           <Box
             component="main"
             sx={{ display: "flex", flexDirection: "column", gap: 2, my: 2 }}
           >
-            <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <h1>Create an invite</h1>
-              {/* <TextField
+            {/* <Grid container spacing={2}>
+            <Grid item xs={6}> */}
+            <h1>Create an invite</h1>
+            {/* <TextField
                 ref={partyRef}
                 label="Username"
               /> */}
-              <input
-                ref={partyRef}
-                style={{ width: "100%", height: "50px", borderRadius: "5px" }}
-                placeholder={"Username"}
-              ></input>
-              <Box >
-                <Button colorScheme="pink" type="submit" onClick={addParty}>
-                  Add party
-                </Button>
-              </Box>
-              {/* <TextField
+            <input
+              ref={partyRef}
+              style={{ width: "100%", height: "50px", borderRadius: "5px" }}
+              placeholder={"Username"}
+            ></input>
+            <Box>
+              <Button colorScheme="pink" type="submit" onClick={addParty}>
+                Add party
+              </Button>
+            </Box>
+            {/* <TextField
                 ref={descriptionRef}
                 label="Description"
                 multiline
                 rows={3}
               /> */}
-              <textarea
-                ref={descriptionRef}
-                style={{ width: "100%", height: "50px", borderRadius: "5px" }}
-                placeholder={"Description"}
-              ></textarea>
+            <textarea
+              ref={descriptionRef}
+              style={{ width: "100%", height: "50px", borderRadius: "5px" }}
+              placeholder={"Description"}
+            ></textarea>
 
-              <LocalizationProvider dateAdapter={AdapterDayjs} sx={{ mt: 2 }}>
-                <Stack spacing={0}>
-                  <MobileDatePicker
-                    label="Date"
-                    value={dateValue}
-                    onChange={(newValue) => {
-                      setDateValue(newValue);
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                    minDate={dayjs(Date.now())}
-                    onError={(newError) => {
-                      setError(newError);
-                      console.log(newError);
-                    }}
-                  />
-                  <br />
-                  <MobileTimePicker
-                    label="Time"
-                    value={timeValue}
-                    onChange={(newValue) => {
-                      setTimeValue(newValue);
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                    minTime={dayjs(Date.now())}
-                    onError={(newError) => setError(newError)}
-                  />
-                </Stack>
-              </LocalizationProvider>
-              <Box flexGrow={1} sx={{ marginTop: 1 }}>
-                <Autocomplete id="autocomplete">
-                  {/* <TextField
+            <LocalizationProvider dateAdapter={AdapterDayjs} sx={{ mt: 2 }}>
+              <Stack spacing={0}>
+                <MobileDatePicker
+                  label="Date"
+                  value={dateValue}
+                  onChange={(newValue) => {
+                    setDateValue(newValue);
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+                  minDate={dayjs(Date.now())}
+                  onError={(newError) => {
+                    setError(newError);
+                    console.log(newError);
+                  }}
+                />
+                <br />
+                <MobileTimePicker
+                  label="Time"
+                  value={timeValue}
+                  onChange={(newValue) => {
+                    setTimeValue(newValue);
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+                  minTime={dayjs(Date.now())}
+                  onError={(newError) => setError(newError)}
+                />
+              </Stack>
+            </LocalizationProvider>
+            <Box flexGrow={1} sx={{ marginTop: 1 }}>
+              <Autocomplete id="autocomplete">
+                {/* <TextField
                     ref={originRef}
                     label="Your address"
                     sx={{ width: "100%" }}
                   /> */}
-                  <input
-                    ref={originRef}
-                    style={{ width: "100%", height: "50px", borderRadius: "5px" }}
-                    placeholder={"Your Address"}
-                  ></input>
-                </Autocomplete>
-              </Box>
-              <Box>
-                <Button type="submit" onClick={updateOrigin}>
-                  Update Origin
-                </Button>
-              </Box>
-              {/* <Box>
+                <input
+                  ref={originRef}
+                  style={{
+                    width: "100%",
+                    height: "50px",
+                    borderRadius: "5px",
+                  }}
+                  placeholder={"Your Address"}
+                ></input>
+              </Autocomplete>
+            </Box>
+            <Box>
+              <Button type="submit" onClick={updateOrigin}>
+                Update Origin
+              </Button>
+            </Box>
+            {/* <Box>
                 {meetAddress ? (
                   <>
                     <p>Meeting address: </p>
@@ -232,32 +252,33 @@ function AddForm() {
                   <Typography>Please select a meeting location:</Typography>
                 )}
               </Box> */}
-            </Grid>
-            <Grid item xs={12}>
-              <Box>
-                <AddFormMapHolder
-                  map={map}
-                  setMap={setMap}
-                  origin={startCoor}
-                  originAddress={address1}
-                  midPoint={midPoint}
-                  nearby={nearby}
-                  setNearby={setNearby}
-                  setMeetAddress={setMeetAddress}
-                />
-              </Box>
-            </Grid>
-              <Box>
-                <Button variant="contained" onClick={sendInvite}>
-                  Send Invite
-                </Button>
-              </Box>
-            </Grid>
+            {/* </Grid> */}
+            {/* <Grid item xs={12}> */}
+            <Box>
+              <AddFormMapHolder
+                map={map}
+                setMap={setMap}
+                origin={startCoor}
+                originAddress={address1}
+                midPoint={midPoint}
+                nearby={nearby}
+                setNearby={setNearby}
+                setMeetAddress={setMeetAddress}
+              />
+            </Box>
+            {/* </Grid> */}
+            <Box>
+              <Button variant="contained" onClick={sendInvite}>
+                Send Invite
+              </Button>
+            </Box>
+            {/* </Grid> */}
           </Box>
         ) : (
           <h1>Loading...</h1>
         )}
-      </Box>  
+      </Box>
+    </Box>
   );
 }
 
