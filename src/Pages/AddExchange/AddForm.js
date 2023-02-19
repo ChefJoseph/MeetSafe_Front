@@ -5,7 +5,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Stack from "@mui/material/Stack";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { Input, TextField } from "@mui/material";
+import { Input, TextField, Typography } from "@mui/material";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
 import Button from "@mui/material/Button";
@@ -14,10 +14,10 @@ import useMidPointFinder from "../../CustomHooks/useMidPointFinder";
 import { Autocomplete } from "@react-google-maps/api";
 import { UserContext } from "../../Context/UserContext";
 import { MapContext } from "../../Context/MapContext";
-import Grid from "@mui/material/Grid";
-// import { Typography } from "@mui/material/styles/createTypography";
+import { useNavigate } from "react-router-dom";
 
 function AddForm() {
+  const navigate = useNavigate();
   const { currentUser } = useContext(UserContext);
   const { isLoaded } = useContext(MapContext);
   const [timeValue, setTimeValue] = useState(dayjs(Date.now()));
@@ -41,6 +41,10 @@ function AddForm() {
 
   function addParty() {
     if (partyRef.current.value) {
+      if (partyRef.current.value === currentUser.username) {
+        alert("Cannot add yourself");
+        return;
+      }
       fetch(`users/find/${partyRef.current.value}`)
         .then((res) => res.json())
         .then((data) => {
@@ -84,24 +88,36 @@ function AddForm() {
     } else {
       const day = new Date(dateValue);
       const time = new Date(timeValue);
+      console.log(dateValue);
+      console.log(timeValue);
 
       const dayString =
         day.getMonth() + 1 + "-" + day.getDate() + "-" + day.getFullYear();
 
       const timeString = time.getHours() + ":" + time.getMinutes();
 
+      const datetime = new Date(dayString + " " + timeString);
+
       const data = {
-        target_party: targetParty,
-        address1_1: address1,
+        address_1: address1,
         address_1_lat: startCoor.lat,
         address_1_lng: startCoor.lng,
         address_2_lat: endCoor.lat,
         address_2_lng: endCoor.lng,
         ...meetAddress,
-        meettime: dayString + " " + timeString,
+        meettime: datetime,
         details: descriptionRef.current.value,
       };
-      console.log(data, "Add form");
+      console.log(data);
+      fetch(`/exchanges/new_meeting/${targetParty}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((res) => res.json())
+        .then(() => navigate("/"));
     }
   }
 
@@ -139,14 +155,13 @@ function AddForm() {
   console.log(error, "addform time error");
 
   return (
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        {isLoaded ? (
-
-          <Box
-            component="main"
-            sx={{ display: "flex", flexDirection: "column", gap: 2, my: 2 }}
-          >
-            <Grid container spacing={2}>
+    <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      {isLoaded ? (
+        <Box
+          component="main"
+          sx={{ display: "flex", flexDirection: "column", gap: 2, my: 2 }}
+        >
+          <Grid container spacing={2}>
             <Grid item xs={6}>
               <h1>Create an invite</h1>
               {/* <TextField
@@ -158,7 +173,7 @@ function AddForm() {
                 style={{ width: "100%", height: "50px", borderRadius: "5px" }}
                 placeholder={"Username"}
               ></input>
-              <Box >
+              <Box>
                 <Button colorScheme="pink" type="submit" onClick={addParty}>
                   Add party
                 </Button>
@@ -212,7 +227,11 @@ function AddForm() {
                   /> */}
                   <input
                     ref={originRef}
-                    style={{ width: "100%", height: "50px", borderRadius: "5px" }}
+                    style={{
+                      width: "100%",
+                      height: "50px",
+                      borderRadius: "5px",
+                    }}
                     placeholder={"Your Address"}
                   ></input>
                 </Autocomplete>
@@ -247,17 +266,17 @@ function AddForm() {
                 />
               </Box>
             </Grid>
-              <Box>
-                <Button variant="contained" onClick={sendInvite}>
-                  Send Invite
-                </Button>
-              </Box>
-            </Grid>
-          </Box>
-        ) : (
-          <h1>Loading...</h1>
-        )}
-      </Box>  
+            <Box>
+              <Button variant="contained" onClick={sendInvite}>
+                Send Invite
+              </Button>
+            </Box>
+          </Grid>
+        </Box>
+      ) : (
+        <h1>Loading...</h1>
+      )}
+    </Box>
   );
 }
 
