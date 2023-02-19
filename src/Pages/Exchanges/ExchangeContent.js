@@ -11,11 +11,8 @@ import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
-<<<<<<< HEAD
 import TransitionsModal from './checkface';
-=======
 import { styled } from '@mui/system'
->>>>>>> f428bfefdf0e75a301c603490350a34ec3ff88ca
 
 const containerStyle = {
   width: '100%',
@@ -209,7 +206,7 @@ function ExchangeContent() {
           )}
         </Box>
       </Box>
-          <TransitionsModal open = {open} handleClose={handleClose}/>
+          {/* <TransitionsModal open = {open} handleClose={handleClose}/> */}
 
     </>
   )
