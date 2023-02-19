@@ -1,4 +1,4 @@
-import React, { useState, useContext, createContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import ExchangeContext from '../../ExchangeProvider'
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -108,8 +108,7 @@ export default function Index({open, setOpen, handleDrawerClose, handlerDraweOpe
   const handleHome = () => {
     navigate("/home");
   };
-  const { exchanges, setExchanges, addExchange, removeExchange, selectExchange, selectedExchange } = useContext(ExchangeContext);
-  const [newExchangeName, setNewExchangeName] = useState("");
+  const { exchanges, setExchanges, selectExchange, selectedExchange } = useContext(ExchangeContext);
 
   const handleClickAway = () => {
     if (open) {
@@ -138,7 +137,7 @@ export default function Index({open, setOpen, handleDrawerClose, handlerDraweOpe
           res.json()
             .then((data) => {
               setExchanges(data)
-              console.log(data, "sidebar exchanges")
+              // console.log(data, "sidebar exchanges")
             });
         }
       });
@@ -195,7 +194,7 @@ export default function Index({open, setOpen, handleDrawerClose, handlerDraweOpe
                 sx={{ bgcolor: stringToColor(`${exchange.user[1].username}`) }}>
                   {exchange.user[1].username.split(",")[0][0].toUpperCase()}
                 </Avatar>
-                <ListItemText primary={exchange.user[1].username} sx={{ textAlign: 'center', opacity: open ? 1 : 0 }} />
+                <ListItemText primary={exchange.user[1].username.toUpperCase()} sx={{ textAlign: 'center', opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
           ))}

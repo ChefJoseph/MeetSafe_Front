@@ -5,7 +5,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Stack from "@mui/material/Stack";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { Input, TextField } from "@mui/material";
+import { Input, TextField, Typography } from "@mui/material";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
 import Button from "@mui/material/Button";
@@ -39,7 +39,7 @@ function AddForm() {
 
   function addParty() {
     if (partyRef.current.value) {
-      fetch(`users/find/${partyRef.current.value}`)
+      fetch(`users/${partyRef.current.value}`)
         .then((res) => res.json())
         .then((data) => {
           if (data.error) {
@@ -93,8 +93,9 @@ function AddForm() {
         address_2_lng: endCoor.lng,
         ...meetAddress,
         meettime: dayString + " " + timeString,
+        details: descriptionRef.current.value,
       };
-      console.log(data);
+      console.log(data, "Add form");
     }
   }
 
@@ -132,40 +133,28 @@ function AddForm() {
   console.log(error, "addform time error");
 
   return (
-    <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+    <Box sx={{ p: 2 }}>
       {isLoaded ? (
-        <>
+        <Box component="main"  sx={{ display: 'flex', flexDirection: 'column', gap: 2, my: 2 }}>
           <h1>Create an invite</h1>
-          {/* <h4>User Field</h4> */}
-          <input
+          <TextField
             ref={partyRef}
-            style={{
-              width: "100%",
-              height: "50px",
-              borderRadius: "5px",
-              borderWidth: "2px",
-            }}
-            placeholder={"username"}
-          ></input>
+            label="Username"
+          />
           <Box>
-            <Button colorScheme="pink" type="submit" onClick={addParty}>
+            <Button variant="contained" type="submit" onClick={addParty}>
               Add party
             </Button>
           </Box>
-          {/* <h4>Description</h4> */}
-          <textarea
+          <TextField
             ref={descriptionRef}
-            style={{
-              width: "100%",
-              height: "100px",
-              borderRadius: "5px",
-              borderWidth: "2px",
-              marginBottom: "10px",
-            }}
-            placeholder={"Description"}
-          ></textarea>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Stack spacing={1}>
+            label="Description"
+            multiline
+            rows={3}
+          />
+
+          <LocalizationProvider dateAdapter={AdapterDayjs} sx={{mt:2}}>
+            <Stack spacing={0}>
               <MobileDatePicker
                 label="Date"
                 value={dateValue}
@@ -192,21 +181,17 @@ function AddForm() {
               />
             </Stack>
           </LocalizationProvider>
-          <Box flexGrow={1} sx={{ marginTop: 3 }}>
-            <Autocomplete>
-              <input
+          <Box flexGrow={1} sx={{ marginTop: 1}}>
+            <Autocomplete id="autocomplete">
+              <TextField
                 ref={originRef}
-                style={{
-                  width: "100%",
-                  height: "50px",
-                  borderRadius: "5px",
-                  borderWidth: "2px",
-                }}
-              ></input>
+                label="Your address"
+                sx={{width:"100%"}}
+              />
             </Autocomplete>
           </Box>
           <Box>
-            <Button type="submit" onClick={updateOrigin}>
+            <Button type="submit" variant="contained" onClick={updateOrigin}>
               Update Origin
             </Button>
           </Box>
@@ -217,9 +202,10 @@ function AddForm() {
                 <p>{meetAddress.meeting_address}</p>
               </>
             ) : (
-              <p>Please select a meeting location</p>
+              <Typography >Please select a meeting location:</Typography>
             )}
           </Box>
+          <Box>
           <AddFormMapHolder
             map={map}
             setMap={setMap}
@@ -230,8 +216,11 @@ function AddForm() {
             setNearby={setNearby}
             setMeetAddress={setMeetAddress}
           />
-          <Button onClick={sendInvite}>Send Invite</Button>
-        </>
+          </Box>
+          <Box >
+            <Button variant="contained" onClick={sendInvite}>Send Invite</Button>
+          </Box>
+        </Box>
       ) : (
         <h1>Loading...</h1>
       )}

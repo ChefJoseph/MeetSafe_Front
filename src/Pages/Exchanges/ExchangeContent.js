@@ -11,13 +11,17 @@ import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
+<<<<<<< HEAD
 import TransitionsModal from './checkface';
+=======
+import { styled } from '@mui/system'
+>>>>>>> f428bfefdf0e75a301c603490350a34ec3ff88ca
 
 const containerStyle = {
   width: '100%',
   height: '400px',
   margin: '20px 0',
-};
+}; 
 
 function ExchangeContent() {
 	const navigate = useNavigate();
@@ -26,7 +30,7 @@ function ExchangeContent() {
   const { exchanges } = useContext(ExchangeContext);
   const currentExchange = exchanges.filter((exchange) => exchange.id === exchange_id);
   // console.log(exchange_id)
-  console.log(currentExchange)
+  console.log(currentExchange, "exchangecontent")
 	const [username, setUsername] = useState('John Doe');
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
@@ -60,8 +64,8 @@ function ExchangeContent() {
 		})
 		.then(response => response.json())
 		.then(data => {
-			console.log(data.user, "/exchange get user")
-			console.log(data.user[1].username, "/exchange get username")
+			// console.log(data.user, "/exchange get user")
+			// console.log(data.user[1].username, "/exchange get username")
 			setUsername(data.user[1].username)
 			setDate(data.meettime)
 			setTime(data.meettime)
@@ -118,7 +122,7 @@ function ExchangeContent() {
       {/* <Typography variant="h4">Exchange title</Typography> */}
 
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, my: 2 }}>
-			<Typography variant="h4">{username}</Typography>
+			<Typography variant="h4">{username.toUpperCase()}</Typography>
 			<Typography variant="h8">Review rating</Typography>
 				<LocalizationProvider dateAdapter={AdapterDayjs}>
         <Stack spacing={1}>
@@ -141,6 +145,10 @@ function ExchangeContent() {
             label="Time"
             value={time}
 						disabled={!editMode}
+						sx={{   
+							"&. Mui-disabled": {
+							color: "rgba(0, 0, 0, 1)" // (default alpha is 0.38)
+						}}}
             onChange={(newValue) => {
               setTime(newValue);
             }}
@@ -153,6 +161,10 @@ function ExchangeContent() {
         <TextField
           label="Details"
           value={details}
+					sx={{   
+						"&. Mui-disabled": {
+						color: "rgba(0, 0, 0, 1)" // (default alpha is 0.38)
+					}}}
           multiline
           rows={3}
           disabled={!editMode}
