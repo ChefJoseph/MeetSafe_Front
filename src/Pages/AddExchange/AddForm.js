@@ -14,7 +14,6 @@ import useMidPointFinder from "../../CustomHooks/useMidPointFinder";
 import { Autocomplete } from "@react-google-maps/api";
 import { UserContext } from "../../Context/UserContext";
 import { MapContext } from "../../Context/MapContext";
-import moment from "moment";
 
 function AddForm() {
   const { currentUser } = useContext(UserContext);
@@ -26,6 +25,7 @@ function AddForm() {
   const [endCoor, setEndCoor] = useState(null);
   const [address1, setAddress1] = useState(null);
   const [meetAddress, setMeetAddress] = useState(null);
+  const [targetParty, setTargetParty] = useState("");
 
   // ref for party input
   const partyRef = useRef();
@@ -39,16 +39,19 @@ function AddForm() {
 
   function addParty() {
     if (partyRef.current.value) {
-      fetch(`users/${partyRef.current.value}`)
+      fetch(`users/find/${partyRef.current.value}`)
         .then((res) => res.json())
         .then((data) => {
           if (data.error) {
             alert(data.error);
           } else {
+            // console.log(data);
             setEndCoor({
               lat: parseFloat(data.lat),
               lng: parseFloat(data.lng),
             });
+            setNearby({});
+            setTargetParty(partyRef.current.value);
           }
         });
     } else {
@@ -86,6 +89,7 @@ function AddForm() {
       const timeString = time.getHours() + ":" + time.getMinutes();
 
       const data = {
+        target_party: targetParty,
         address1_1: address1,
         address_1_lat: startCoor.lat,
         address_1_lng: startCoor.lng,
@@ -135,25 +139,38 @@ function AddForm() {
   return (
     <Box sx={{ p: 2 }}>
       {isLoaded ? (
-        <Box component="main"  sx={{ display: 'flex', flexDirection: 'column', gap: 2, my: 2 }}>
+        <Box
+          component="main"
+          sx={{ display: "flex", flexDirection: "column", gap: 2, my: 2 }}
+        >
           <h1>Create an invite</h1>
-          <TextField
+          {/* <TextField
             ref={partyRef}
             label="Username"
-          />
+          /> */}
+          <input
+            ref={partyRef}
+            style={{ width: "100%", height: "50px", borderRadius: "5px" }}
+            placeholder={"Username"}
+          ></input>
           <Box>
             <Button variant="contained" type="submit" onClick={addParty}>
               Add party
             </Button>
           </Box>
-          <TextField
+          {/* <TextField
             ref={descriptionRef}
             label="Description"
             multiline
             rows={3}
-          />
+          /> */}
+          <textarea
+            ref={descriptionRef}
+            style={{ width: "100%", height: "50px", borderRadius: "5px" }}
+            placeholder={"Description"}
+          ></textarea>
 
-          <LocalizationProvider dateAdapter={AdapterDayjs} sx={{mt:2}}>
+          <LocalizationProvider dateAdapter={AdapterDayjs} sx={{ mt: 2 }}>
             <Stack spacing={0}>
               <MobileDatePicker
                 label="Date"
@@ -181,13 +198,18 @@ function AddForm() {
               />
             </Stack>
           </LocalizationProvider>
-          <Box flexGrow={1} sx={{ marginTop: 1}}>
+          <Box flexGrow={1} sx={{ marginTop: 1 }}>
             <Autocomplete id="autocomplete">
-              <TextField
+              {/* <TextField
                 ref={originRef}
                 label="Your address"
-                sx={{width:"100%"}}
-              />
+                sx={{ width: "100%" }}
+              /> */}
+              <input
+                ref={originRef}
+                style={{ width: "100%", height: "50px", borderRadius: "5px" }}
+                placeholder={"Your Address"}
+              ></input>
             </Autocomplete>
           </Box>
           <Box>
@@ -202,23 +224,25 @@ function AddForm() {
                 <p>{meetAddress.meeting_address}</p>
               </>
             ) : (
-              <Typography >Please select a meeting location:</Typography>
+              <Typography>Please select a meeting location:</Typography>
             )}
           </Box>
           <Box>
-          <AddFormMapHolder
-            map={map}
-            setMap={setMap}
-            origin={startCoor}
-            originAddress={address1}
-            midPoint={midPoint}
-            nearby={nearby}
-            setNearby={setNearby}
-            setMeetAddress={setMeetAddress}
-          />
+            <AddFormMapHolder
+              map={map}
+              setMap={setMap}
+              origin={startCoor}
+              originAddress={address1}
+              midPoint={midPoint}
+              nearby={nearby}
+              setNearby={setNearby}
+              setMeetAddress={setMeetAddress}
+            />
           </Box>
-          <Box >
-            <Button variant="contained" onClick={sendInvite}>Send Invite</Button>
+          <Box>
+            <Button variant="contained" onClick={sendInvite}>
+              Send Invite
+            </Button>
           </Box>
         </Box>
       ) : (
