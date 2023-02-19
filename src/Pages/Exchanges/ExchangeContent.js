@@ -11,6 +11,7 @@ import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
+import TransitionsModal from './checkface';
 
 const containerStyle = {
   width: '100%',
@@ -189,14 +190,14 @@ function ExchangeContent() {
               <Button variant="contained" color="error" onClick={handleDeleteClick}>
                 Delete
               </Button>
-              {/* <Button onClick={handleOpen} variant="contained" color="error">
+              <Button onClick={handleOpen} variant="contained" color="error">
                 Present
-              </Button> */}
+              </Button>
             </Box>
           )}
         </Box>
       </Box>
-          {/* <TransitionsModal open = {open} handleClose={handleClose}/> */}
+          <TransitionsModal open = {open} handleClose={handleClose}/>
 
     </>
   )

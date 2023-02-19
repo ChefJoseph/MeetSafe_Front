@@ -1,7 +1,7 @@
 import * as facejs from "face-api.js"
 
 
-export async function check_face(face,testFace) {
+async function check_face(face,testFace) {
 
     const img = await facejs.fetchImage(face)
     const detectedFace = await facejs.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor()
@@ -19,3 +19,5 @@ export async function check_face(face,testFace) {
     return true
 
 }
+
+export default check_face

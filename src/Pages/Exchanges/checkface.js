@@ -3,22 +3,64 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
+import Webcam from 'react-webcam';
+import load_models from "../../check_face/load_models";
+import check_face from '../../check_face/check_face';
+import { useEffect, useRef, useState, useContext } from "react";
+import { UserContext } from '../../Context/UserContext';
+
+const videoConstraints = {
+  width: window.innerWidth,
+  height: window.innerHeight,
+  facingMode: "user"
+}
 
 const style = {
   position: 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: window.innerWidth,
+  height: window.innerHeight,
   bgcolor: 'background.paper',
-  border: '2px solid #000',
+  border: '1px solid #000',
+  borderRadius: '5px',
   boxShadow: 24,
   p: 4,
 };
 
 export default function TransitionsModal({ open,handleClose }) {
-  
+
+  const { currentUser } = useContext(UserContext);
+  const webcamRef = useRef(null);
+  const [isLoaded,setLoaded] = useState(false)
+  const [testFace,setTestFace] = useState(null)
+
+
+    useEffect(()=> {
+        load_models(currentUser.avatar).then((data)=> {
+          setLoaded(true)
+
+          if (data) {
+            setTestFace(data)
+          }
+        })
+      },[])
+    
+      useEffect(()=> {
+        if (webcamRef && isLoaded) {
+          //Need some kind of multthreading logic or smthing
+          //Every time count changes start async process, 
+            setInterval(() => {
+              
+              const screenFace = webcamRef.current.getScreenshot()
+              check_face(screenFace).then(data=>console.log(data))
+            }, 1000)
+
+        }
+    },[isLoaded])
+    
+    console.log(isLoaded)
     return (
       <div>
         <Button onClick={open}>Open modal</Button>
@@ -35,12 +77,14 @@ export default function TransitionsModal({ open,handleClose }) {
         >
           <Fade in={open}>
             <Box sx={style}>
-              <Typography id="transition-modal-title" variant="h6" component="h2">
-                Text in a modal
-              </Typography>
-              <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-                Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-              </Typography>
+             <Webcam audio={false}
+              videoConstraints={videoConstraints}
+              ref={webcamRef}
+              height = {window.innerHeight / 1.2}
+              width = {window.innerWidth / 1.2}
+              mirrored={true}
+            />
+          <Button color="error" onClick={handleClose}>Close </Button>
             </Box>
           </Fade>
         </Modal>
