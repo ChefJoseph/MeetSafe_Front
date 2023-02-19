@@ -235,16 +235,16 @@ function AddForm() {
                 Update Origin
               </Button>
             </Box>
-            {/* <Box>
-                {meetAddress ? (
-                  <>
-                    <p>Meeting address: </p>
-                    <p>{meetAddress.meeting_address}</p>
-                  </>
-                ) : (
-                  <Typography>Please select a meeting location:</Typography>
-                )}
-              </Box> */}
+            <Box>
+              {meetAddress ? (
+                <>
+                  <p>Meeting address: </p>
+                  <p>{meetAddress.meeting_address}</p>
+                </>
+              ) : (
+                <Typography>Please select a meeting location:</Typography>
+              )}
+            </Box>
             {/* </Grid> */}
             {/* <Grid item xs={12}> */}
             <Box>
