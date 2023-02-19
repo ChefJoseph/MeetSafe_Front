@@ -93,6 +93,7 @@ function AddForm() {
         address_2_lng: endCoor.lng,
         ...meetAddress,
         meettime: dayString + " " + timeString,
+        details: descriptionRef.current.value,
       };
       console.log(data, "Add form");
     }
