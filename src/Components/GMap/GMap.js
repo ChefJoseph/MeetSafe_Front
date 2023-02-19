@@ -123,7 +123,7 @@ function GMap({
       onLoad={(map) => setMap(map)}
       zoom={13}
       center={center}
-      mapContainerStyle={{ width: width, height: '400px'}}
+      mapContainerStyle={{ width: width, height: height }}
       options={options}
     >
       {origin ? <Marker position={origin} /> : null}

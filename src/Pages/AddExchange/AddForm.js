@@ -5,7 +5,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Stack from "@mui/material/Stack";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { Input, TextField, Typography } from "@mui/material";
+import { Input, TextField } from "@mui/material";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
 import Button from "@mui/material/Button";
@@ -137,7 +137,7 @@ function AddForm() {
   console.log(error, "addform time error");
 
   return (
-    <Box sx={{ p: 2 }}>
+    <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
       {isLoaded ? (
         <Box
           component="main"
@@ -154,7 +154,7 @@ function AddForm() {
             placeholder={"Username"}
           ></input>
           <Box>
-            <Button variant="contained" type="submit" onClick={addParty}>
+            <Button colorScheme="pink" type="submit" onClick={addParty}>
               Add party
             </Button>
           </Box>
@@ -213,7 +213,7 @@ function AddForm() {
             </Autocomplete>
           </Box>
           <Box>
-            <Button type="submit" variant="contained" onClick={updateOrigin}>
+            <Button type="submit" onClick={updateOrigin}>
               Update Origin
             </Button>
           </Box>
