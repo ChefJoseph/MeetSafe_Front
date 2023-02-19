@@ -1,4 +1,4 @@
-import React, { useState, useContext, createContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import ExchangeContext from '../../ExchangeProvider'
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -108,8 +108,7 @@ export default function Index({open, setOpen, handleDrawerClose, handlerDraweOpe
   const handleHome = () => {
     navigate("/home");
   };
-  const { exchanges, setExchanges, addExchange, removeExchange, selectExchange, selectedExchange } = useContext(ExchangeContext);
-  const [newExchangeName, setNewExchangeName] = useState("");
+  const { exchanges, setExchanges, selectExchange, selectedExchange } = useContext(ExchangeContext);
 
   const handleClickAway = () => {
     if (open) {

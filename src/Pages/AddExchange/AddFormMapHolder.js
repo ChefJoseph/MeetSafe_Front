@@ -2,6 +2,13 @@ import { Button } from "@mui/material";
 import { useState } from "react";
 import GMap from "../../Components/GMap/GMap";
 
+const containerStyle = {
+  width: '100%',
+  height: '200px',
+  margin: '20px 0',
+}; 
+
+
 function AddFormMapHolder({
   map,
   setMap,
@@ -57,6 +64,7 @@ function AddFormMapHolder({
         Hospitals
       </Button>
       <GMap
+        mapContainerStyle={containerStyle}
         map={map}
         setMap={setMap}
         origin={origin}

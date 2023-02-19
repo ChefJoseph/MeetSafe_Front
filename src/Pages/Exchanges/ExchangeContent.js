@@ -11,12 +11,13 @@ import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
+import { styled } from '@mui/system'
 
 const containerStyle = {
   width: '100%',
   height: '400px',
   margin: '20px 0',
-};
+}; 
 
 function ExchangeContent() {
 	const navigate = useNavigate();
@@ -140,6 +141,10 @@ function ExchangeContent() {
             label="Time"
             value={time}
 						disabled={!editMode}
+						sx={{   
+							"&. Mui-disabled": {
+							color: "rgba(0, 0, 0, 1)" // (default alpha is 0.38)
+						}}}
             onChange={(newValue) => {
               setTime(newValue);
             }}
@@ -152,6 +157,10 @@ function ExchangeContent() {
         <TextField
           label="Details"
           value={details}
+					sx={{   
+						"&. Mui-disabled": {
+						color: "rgba(0, 0, 0, 1)" // (default alpha is 0.38)
+					}}}
           multiline
           rows={3}
           disabled={!editMode}
