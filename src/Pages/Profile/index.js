@@ -16,6 +16,7 @@ function Index() {
 
   const { currentUser, setCurrentUser } = useContext(UserContext);
 
+
   const [open, setOpen] = useState(false);
   const navigate = useNavigate()
 
@@ -49,7 +50,7 @@ function Index() {
       <Box component="main" sx={{ flexGrow: 1, p: 3, ml:5 }}>
       <CssBaseline />
       <SideBar open={open} setOpen={setOpen} handleDrawerClose={handleDrawerClose} handleDrawerOpen={handleDrawerOpen}/>
-      <ProfileInfo/>
+      <ProfileInfo currentUser={currentUser}/>
       <NavBar open={open} setOpen={setOpen} handleDrawerClose={handleDrawerClose} handleDrawerOpen={handleDrawerOpen}/>
       <Button onClick={handleHistoryPage}>Exchange History</Button>
       <LogoutIcon onClick={handleLogout}>Logout</LogoutIcon>
