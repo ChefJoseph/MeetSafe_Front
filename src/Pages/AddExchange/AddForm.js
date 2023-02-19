@@ -5,7 +5,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Stack from "@mui/material/Stack";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { Input, TextField } from "@mui/material";
+import { Input, TextField, Typography } from "@mui/material";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
 import Button from "@mui/material/Button";
@@ -39,6 +39,10 @@ function AddForm() {
 
   function addParty() {
     if (partyRef.current.value) {
+      if (partyRef.current.value === currentUser.username) {
+        alert("Cannot add yourself");
+        return;
+      }
       fetch(`users/find/${partyRef.current.value}`)
         .then((res) => res.json())
         .then((data) => {
@@ -82,24 +86,36 @@ function AddForm() {
     } else {
       const day = new Date(dateValue);
       const time = new Date(timeValue);
+      console.log(dateValue);
+      console.log(timeValue);
 
       const dayString =
         day.getMonth() + 1 + "-" + day.getDate() + "-" + day.getFullYear();
 
       const timeString = time.getHours() + ":" + time.getMinutes();
 
+      const datetime = new Date(dayString + " " + timeString);
+
       const data = {
-        target_party: targetParty,
-        address1_1: address1,
+        address_1: address1,
         address_1_lat: startCoor.lat,
         address_1_lng: startCoor.lng,
         address_2_lat: endCoor.lat,
         address_2_lng: endCoor.lng,
         ...meetAddress,
-        meettime: dayString + " " + timeString,
+        meettime: datetime,
         details: descriptionRef.current.value,
       };
-      console.log(data, "Add form");
+      console.log(data);
+      fetch(`/exchanges/new_meeting/${targetParty}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((res) => res.json())
+        .then(console.log);
     }
   }
 
