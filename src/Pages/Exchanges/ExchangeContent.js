@@ -25,7 +25,7 @@ function ExchangeContent() {
   const { exchanges } = useContext(ExchangeContext);
   const currentExchange = exchanges.filter((exchange) => exchange.id === exchange_id);
   // console.log(exchange_id)
-  console.log(currentExchange)
+  console.log(currentExchange, "exchangecontent")
 	const [username, setUsername] = useState('John Doe');
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
@@ -59,8 +59,8 @@ function ExchangeContent() {
 		})
 		.then(response => response.json())
 		.then(data => {
-			console.log(data.user, "/exchange get user")
-			console.log(data.user[1].username, "/exchange get username")
+			// console.log(data.user, "/exchange get user")
+			// console.log(data.user[1].username, "/exchange get username")
 			setUsername(data.user[1].username)
 			setDate(data.meettime)
 			setTime(data.meettime)
@@ -117,7 +117,7 @@ function ExchangeContent() {
       {/* <Typography variant="h4">Exchange title</Typography> */}
 
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, my: 2 }}>
-			<Typography variant="h4">{username}</Typography>
+			<Typography variant="h4">{username.toUpperCase()}</Typography>
 			<Typography variant="h8">Review rating</Typography>
 				<LocalizationProvider dateAdapter={AdapterDayjs}>
         <Stack spacing={1}>

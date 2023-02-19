@@ -6,7 +6,7 @@ import testface from "../Assets/face_imgs/WIN_20220706_17_10_23_Pro.jpg"
 export async function load_models() {
     const MODEL_URL = "/models"
     const displaySize = {width: window.innerWidth,height: window.innerHeight}
-    console.log(displaySize)
+    console.log(displaySize, "load_models")
 
     await facejs.loadSsdMobilenetv1Model(MODEL_URL)
     await facejs.loadFaceLandmarkModel(MODEL_URL)

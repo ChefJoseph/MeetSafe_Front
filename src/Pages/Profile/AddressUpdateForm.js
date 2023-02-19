@@ -42,7 +42,7 @@ function AddressUpdateForm() {
             .then((data) => {
               // TODO
               // update user context here
-              console.log(data);
+              console.log(data, "gmaps addressupdateform");
             });
         });
     }

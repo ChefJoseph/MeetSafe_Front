@@ -138,7 +138,7 @@ export default function Index({open, setOpen, handleDrawerClose, handlerDraweOpe
           res.json()
             .then((data) => {
               setExchanges(data)
-              console.log(data, "sidebar exchanges")
+              // console.log(data, "sidebar exchanges")
             });
         }
       });
@@ -195,7 +195,7 @@ export default function Index({open, setOpen, handleDrawerClose, handlerDraweOpe
                 sx={{ bgcolor: stringToColor(`${exchange.user[1].username}`) }}>
                   {exchange.user[1].username.split(",")[0][0].toUpperCase()}
                 </Avatar>
-                <ListItemText primary={exchange.user[1].username} sx={{ textAlign: 'center', opacity: open ? 1 : 0 }} />
+                <ListItemText primary={exchange.user[1].username.toUpperCase()} sx={{ textAlign: 'center', opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
           ))}

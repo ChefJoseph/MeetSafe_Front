@@ -94,7 +94,7 @@ function AddForm() {
         ...meetAddress,
         meettime: dayString + " " + timeString,
       };
-      console.log(data);
+      console.log(data, "Add form");
     }
   }
 
