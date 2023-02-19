@@ -5,6 +5,7 @@ import HomeContent from './HomeContent'
 import Box from '@mui/material/Box';
 import { CssBaseline } from '@mui/material';
 
+
 function Index() {
   const [open, setOpen] = useState(false);
 
