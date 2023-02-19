@@ -18,6 +18,8 @@ function Index() {
 
 
   const [open, setOpen] = useState(false);
+  const [edit,setEdit] = useState(false)
+
   const navigate = useNavigate()
 
   function handleLogout() {
@@ -46,14 +48,15 @@ function Index() {
     navigate('/history')
   }
   return (
-    <div>
-      <Box component="main" sx={{ flexGrow: 1, p: 3, ml:5 }}>
+    <div style={{display:'grid',justifyContent:"center",alignItems:"center",marginTop:"10%"}}>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, ml:5, borderRadius:"10px", boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"}}>
       <CssBaseline />
       <SideBar open={open} setOpen={setOpen} handleDrawerClose={handleDrawerClose} handleDrawerOpen={handleDrawerOpen}/>
-      <ProfileInfo currentUser={currentUser}/>
+      <ProfileInfo edit={edit} currentUser={currentUser}/>
       <NavBar open={open} setOpen={setOpen} handleDrawerClose={handleDrawerClose} handleDrawerOpen={handleDrawerOpen}/>
       <Button onClick={handleHistoryPage}>Exchange History</Button>
-      <LogoutIcon onClick={handleLogout}>Logout</LogoutIcon>
+      <Button onClick={()=>setEdit(!edit)}> {edit ? "Edit Address" : "Edit Details" } </Button>
+      <LogoutIcon sx= {{marginLeft:"40%"}} onClick={handleLogout}>Logout</LogoutIcon>
       </Box>
       
       

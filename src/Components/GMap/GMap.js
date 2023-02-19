@@ -11,8 +11,8 @@ import { MapContext } from "../../Context/MapContext";
 function GMap({
   setMap,
   origin,
-  originAddress,
   midPoint,
+  meetCoor,
   width,
   height,
   nearby,
@@ -39,6 +39,14 @@ function GMap({
       setCenter(origin);
     }
   }, [origin, midPoint]);
+
+  useEffect(() => {
+    if (origin && meetCoor) {
+      calculateRoute(meetCoor);
+    } else {
+      setDirectionsResponse(null);
+    }
+  }, [origin, meetCoor]);
 
   const iconUrl = {
     police:
@@ -131,6 +139,12 @@ function GMap({
         <Marker
           position={midPoint}
           icon={"https://img.icons8.com/fluency/48/null/centre-point.png"}
+        />
+      ) : null}
+      {meetCoor ? (
+        <Marker
+          position={meetCoor}
+          icon={"https://img.icons8.com/nolan/64/collect.png"}
         />
       ) : null}
       {showMarkers}

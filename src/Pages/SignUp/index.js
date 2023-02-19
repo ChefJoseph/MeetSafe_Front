@@ -100,7 +100,7 @@ export default function SignUp() {
             <Typography component="h1" variant="h5">
               Sign Up
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+            <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
             <Avatar 
             style = {{margin: "auto"}}
             sx = {{width:150, height:150}}
