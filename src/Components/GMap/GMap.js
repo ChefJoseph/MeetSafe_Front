@@ -50,7 +50,6 @@ function GMap({
 
   const options = {
     disableDefaultUI: true,
-    zoomControl: true,
   };
 
   // const { isLoaded, loadError } = useJsApiLoader({
