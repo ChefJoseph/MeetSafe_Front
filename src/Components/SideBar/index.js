@@ -19,6 +19,7 @@ import ClickAwayListener from "@mui/base/ClickAwayListener";
 
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
+import { UserContext } from "../../Context/UserContext";
 
 const drawerWidth = 150;
 
@@ -108,6 +109,7 @@ export default function Index({
   handlerDraweOpen,
 }) {
   // const theme = useTheme();
+  const { currentUser } = useContext(UserContext);
   const navigate = useNavigate();
   const handleHome = () => {
     navigate("/home");
@@ -218,18 +220,45 @@ export default function Index({
                     justifyContent: "center",
                   }}
                 >
-                  <Avatar
-                    key={exchange.id}
-                    sx={{
-                      bgcolor: stringToColor(`${exchange.user[1].username}`),
-                    }}
-                  >
-                    {exchange.user[1].username.split(",")[0][0].toUpperCase()}
-                  </Avatar>
-                  <ListItemText
-                    primary={exchange.user[1].username.toUpperCase()}
-                    sx={{ textAlign: "center", opacity: open ? 1 : 0 }}
-                  />
+                  {exchange.user[0].username === currentUser.username ? (
+                    <>
+                      <Avatar
+                        key={exchange.id}
+                        sx={{
+                          bgcolor: stringToColor(
+                            `${exchange.user[1].username}`
+                          ),
+                        }}
+                      >
+                        {exchange.user[1].username
+                          .split(",")[0][0]
+                          .toUpperCase()}
+                      </Avatar>
+                      <ListItemText
+                        primary={exchange.user[1].username.toUpperCase()}
+                        sx={{ textAlign: "center", opacity: open ? 1 : 0 }}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <Avatar
+                        key={exchange.id}
+                        sx={{
+                          bgcolor: stringToColor(
+                            `${exchange.user[0].username}`
+                          ),
+                        }}
+                      >
+                        {exchange.user[0].username
+                          .split(",")[0][0]
+                          .toUpperCase()}
+                      </Avatar>
+                      <ListItemText
+                        primary={exchange.user[0].username.toUpperCase()}
+                        sx={{ textAlign: "center", opacity: open ? 1 : 0 }}
+                      />
+                    </>
+                  )}
                 </ListItemButton>
               </ListItem>
             ))}

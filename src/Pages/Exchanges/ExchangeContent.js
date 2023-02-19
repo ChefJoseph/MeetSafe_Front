@@ -12,6 +12,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
 import GMap from "../../Components/GMap/GMap";
+import { UserContext } from "../../Context/UserContext";
 
 const containerStyle = {
   width: "100%",
@@ -20,6 +21,7 @@ const containerStyle = {
 };
 
 function ExchangeContent() {
+  const { currentUser } = useContext(UserContext);
   const navigate = useNavigate();
   const { exchange_id } = useParams();
   const [lat, lng] = useCurrentLocation();
@@ -69,7 +71,11 @@ function ExchangeContent() {
         console.log(data);
         // console.log(data.user, "/exchange get user")
         // console.log(data.user[1].username, "/exchange get username")
-        setUsername(data.user[1].username);
+        const party =
+          data.user[0].username === currentUser.username
+            ? data.user[1].username
+            : data.user[0].username;
+        setUsername(party);
         setDate(data.meettime);
         setTime(data.meettime);
         setDetails(data.details);
