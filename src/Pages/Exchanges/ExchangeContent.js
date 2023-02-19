@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ExchangeContext from "../../ExchangeProvider";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import { GoogleMap, LoadScript } from "@react-google-maps/api";
 import { useParams } from "react-router-dom";
 import { useCurrentLocation } from "../../CustomHooks/usecurrentlocation";
@@ -125,72 +125,73 @@ function ExchangeContent() {
 
   return (
     <>
-      <Box sx={{ p: 2 }}>
-        {/* <Typography variant="h4">Exchange title</Typography> */}
+      <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <Box sx={{ p: 2, width: "100%", maxWidth: "700px" }}>
+          {/* <Typography variant="h4">Exchange title</Typography> */}
 
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2, my: 2 }}>
-          <Typography variant="h4">{username.toUpperCase()}</Typography>
-          <Typography variant="h8">Review rating</Typography>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Stack spacing={1}>
-              <MobileDatePicker
-                label="Date"
-                value={date}
-                disabled={!editMode}
-                onChange={(newValue) => {
-                  setDate(newValue);
-                }}
-                renderInput={(params) => <TextField {...params} />}
-                minDate={dayjs(Date.now())}
-                onError={(newError) => {
-                  setError(newError);
-                  console.log(newError);
-                }}
-              />
-              <br />
-              <MobileTimePicker
-                label="Time"
-                value={time}
-                disabled={!editMode}
-                sx={{
-                  "&. Mui-disabled": {
-                    color: "rgba(0, 0, 0, 1)", // (default alpha is 0.38)
-                  },
-                }}
-                onChange={(newValue) => {
-                  setTime(newValue);
-                }}
-                renderInput={(params) => <TextField {...params} />}
-                minTime={dayjs(Date.now())}
-                onError={(newError) => setError(newError)}
-              />
-              <TextField
-                label="Details"
-                value={details}
-                sx={{
-                  "&. Mui-disabled": {
-                    color: "rgba(0, 0, 0, 1)", // (default alpha is 0.38)
-                  },
-                }}
-                multiline
-                rows={3}
-                disabled={!editMode}
-                onChange={(e) => setDetails(e.target.value)}
-              />
-              <br />
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 2, my: 2 }}>
+            <Typography variant="h4">{username.toUpperCase()}</Typography>
+            <Typography variant="h8">Review rating</Typography>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <Stack spacing={1}>
+                <MobileDatePicker
+                  label="Date"
+                  value={date}
+                  disabled={!editMode}
+                  onChange={(newValue) => {
+                    setDate(newValue);
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+                  minDate={dayjs(Date.now())}
+                  onError={(newError) => {
+                    setError(newError);
+                    console.log(newError);
+                  }}
+                />
+                <br />
+                <MobileTimePicker
+                  label="Time"
+                  value={time}
+                  disabled={!editMode}
+                  sx={{
+                    "&. Mui-disabled": {
+                      color: "rgba(0, 0, 0, 1)", // (default alpha is 0.38)
+                    },
+                  }}
+                  onChange={(newValue) => {
+                    setTime(newValue);
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+                  minTime={dayjs(Date.now())}
+                  onError={(newError) => setError(newError)}
+                />
+                <TextField
+                  label="Details"
+                  value={details}
+                  sx={{
+                    "&. Mui-disabled": {
+                      color: "rgba(0, 0, 0, 1)", // (default alpha is 0.38)
+                    },
+                  }}
+                  multiline
+                  rows={3}
+                  disabled={!editMode}
+                  onChange={(e) => setDetails(e.target.value)}
+                />
+                <br />
 
-              <TextField
-                label="Location"
-                value={location}
-                disabled={!editMode}
-                onChange={(e) => setLocation(e.target.value)}
-              />
-              <Typography>
-                <button onClick={handleLocation}>Here</button>
-              </Typography>
-            </Stack>
-          </LocalizationProvider>
-          {/* <LoadScript
+                <TextField
+                  label="Location"
+                  value={location}
+                  disabled={!editMode}
+                  onChange={(e) => setLocation(e.target.value)}
+                />
+                <Typography>
+                  <button onClick={handleLocation}>Here</button>
+                </Typography>
+              </Stack>
+            </LocalizationProvider>
+            {/* <LoadScript
             googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAP_API_KEY}
           >
             <GoogleMap
@@ -199,44 +200,45 @@ function ExchangeContent() {
               zoom={10}
             />
           </LoadScript> */}
-          <Box sx={{ width: "100%", height: "500px" }}>
-            <GMap
-              setMap={setMap}
-              origin={{ lat, lng }}
-              midPoint={null}
-              meetCoor={meetCoor}
-              width={"100%"}
-              height={"100%"}
-              nearby={{}}
-            />
-          </Box>
+            <Box sx={{ width: "100%", height: "500px" }}>
+              <GMap
+                setMap={setMap}
+                origin={{ lat, lng }}
+                midPoint={null}
+                meetCoor={meetCoor}
+                width={"100%"}
+                height={"100%"}
+                nearby={{}}
+              />
+            </Box>
 
-          {editMode ? (
-            <Box sx={{ display: "flex", gap: 2 }}>
-              <Button variant="contained" onClick={handleSaveClick}>
-                Save
-              </Button>
-              <Button variant="outlined" onClick={() => setEditMode(false)}>
-                Cancel
-              </Button>
-            </Box>
-          ) : (
-            <Box sx={{ display: "flex", gap: 2 }}>
-              <Button variant="contained" onClick={handleEditClick}>
-                Edit
-              </Button>
-              <Button
-                variant="contained"
-                color="error"
-                onClick={handleDeleteClick}
-              >
-                Delete
-              </Button>
-              <Button onClick={handleOpen} variant="contained" color="error">
-                Present
-              </Button>
-            </Box>
-          )}
+            {editMode ? (
+              <Box sx={{ display: "flex", gap: 2 }}>
+                <Button variant="contained" onClick={handleSaveClick}>
+                  Save
+                </Button>
+                <Button variant="outlined" onClick={() => setEditMode(false)}>
+                  Cancel
+                </Button>
+              </Box>
+            ) : (
+              <Box sx={{ display: "flex", gap: 2 }}>
+                <Button variant="contained" onClick={handleEditClick}>
+                  Edit
+                </Button>
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={handleDeleteClick}
+                >
+                  Delete
+                </Button>
+                <Button onClick={handleOpen} variant="contained" color="error">
+                  Present
+                </Button>
+              </Box>
+            )}
+          </Box>
         </Box>
       </Box>
       {/* <TransitionsModal open = {open} handleClose={handleClose}/> */}
