@@ -153,7 +153,7 @@ export default function Index({
     });
   }, []);
 
-  console.log(exchanges);
+  // console.log(exchanges);
 
   return (
     // <ClickAwayListener onClickAway={handleClickAway} mouseEvent="onMouseDown" touchEvent="onTouchStart">

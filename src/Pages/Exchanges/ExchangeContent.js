@@ -34,6 +34,7 @@ function ExchangeContent() {
   const [time, setTime] = useState("");
   const [details, setDetails] = useState("");
   const [location, setLocation] = useState("");
+  const [meetCoor, setMeetCoor] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [response, setResponse] = useState(null);
   const [error, setError] = useState(null);
@@ -65,6 +66,7 @@ function ExchangeContent() {
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         // console.log(data.user, "/exchange get user")
         // console.log(data.user[1].username, "/exchange get username")
         setUsername(data.user[1].username);
@@ -72,11 +74,16 @@ function ExchangeContent() {
         setTime(data.meettime);
         setDetails(data.details);
         setLocation(data.meeting_address);
+        const coor = {
+          lat: parseFloat(data.meeting_address_lat),
+          lng: parseFloat(data.meeting_address_lng),
+        };
+        setMeetCoor(coor);
       })
       .catch((error) => {
         console.error(error);
       });
-  });
+  }, [exchange_id]);
 
   const handleEditClick = () => {
     setEditMode(true);
@@ -194,10 +201,10 @@ function ExchangeContent() {
           </LoadScript> */}
           <Box sx={{ width: "100%", height: "500px" }}>
             <GMap
-              map={map}
               setMap={setMap}
               origin={{ lat, lng }}
               midPoint={null}
+              meetCoor={meetCoor}
               width={"100%"}
               height={"100%"}
               nearby={{}}
