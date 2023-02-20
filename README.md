@@ -1,6 +1,8 @@
 <a href="https://devpost.com/software/meetsafe">MLH Project Site</a>
 <br>
 <a href="https://github.com/AlexTaylorCoder/MeetSafe-Backend"> Backend Repository</a>
+<br>
+<a href ="https://dbdiagram.io/d/63ee99bf296d97641d81955e">Table Associations</a>
 ## Inspiration
 
 Our app was inspired by the growing concern for overconsumption and waste, and the increasing focus on recycling, reusing, and reducing waste in our daily lives. We recognized the potential for bartering and reusing items as a way to reduce waste and help alleviate supply chain issues. However, we also understand the risks involved in meeting with strangers for these transactions. Thus, we aimed to create a safe and secure platform for resellers to connect with buyers and reduce waste in a responsible and sustainable way. With our app, users can make meaningful and eco-friendly transactions, while also ensuring their safety and privacy.
