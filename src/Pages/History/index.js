@@ -22,7 +22,7 @@ function Index() {
       <Box component="main" sx={{ flexGrow: 1, p: 3, ml:5 }}>
       <CssBaseline />
       <SideBar open={open} setOpen={setOpen} handleDrawerClose={handleDrawerClose} handleDrawerOpen={handleDrawerOpen}/>
-      <h1 component="main" sx={{ flexGrow: 1, p: 3 }}>Exchange History</h1>
+      <h1 component="main" sx={{ flexGrow: 1, p: 3 }}>User Exchanges</h1>
       <HistoryCards/>
       <NavBar open={open} setOpen={setOpen} handleDrawerClose={handleDrawerClose} handleDrawerOpen={handleDrawerOpen}/>
       </Box>

@@ -1,4 +1,5 @@
 import { useState , useEffect} from 'react'
+
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
@@ -8,7 +9,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-
+import moment from "moment";
+import { useContext } from 'react';
+import { UserContext } from '../../Context/UserContext';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -30,64 +33,44 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(
-  name: string,
-  calories: string,
-  fat: string,
-  carbs: number,
-  protein: string,
-) {
-  return { name, calories, fat, carbs, protein };
-}
 
 export default function HistoryCards() {
 
-  const [currentUser, setCurrentUser] = useState(null)
-  const [userExchanges, setUserExchanges] = useState(null)
-
+  const { currentUser, setCurrentUser } = useContext(UserContext);
+  const [userExchanges, setUserExchanges] = useState([])
   useEffect(() => {
     fetch('/history').then(res => res.json()).then(res => setUserExchanges(res))
   }, []);
 
-
-  useEffect(() => {
-    fetch('/me').then(res => res.json()).then(res => setCurrentUser(res))
-  }, []);
-
-
   console.log(userExchanges)
+  console.log(moment("2021-07-14T00:00:00.000Z").utc().format('YYYY-MM-DD'));
   console.log(currentUser)
-
-  const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  ];
 
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow>
-            <StyledTableCell>Name</StyledTableCell>
-            <StyledTableCell align="right">Email</StyledTableCell>
-            <StyledTableCell align="right">Meeting Address</StyledTableCell>
+            <StyledTableCell>Username</StyledTableCell>
             <StyledTableCell align="right">Invite Code</StyledTableCell>
-            <StyledTableCell align="right">Details</StyledTableCell>
+            <StyledTableCell align="right">Meeting Address</StyledTableCell>
+            <StyledTableCell align="right">details</StyledTableCell>
+            <StyledTableCell align="right">Date</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {userExchanges.map((row) => (
-            <StyledTableRow key={currentUser.username}>
+          {userExchanges.map((exchange) => (
+            <StyledTableRow key={exchange.id}>
               <StyledTableCell component="th" scope="row">
-                {currentUser.username}
+                {exchange.user.filter((u) => {return currentUser.username === u.username
+                ? "" : u}).map((u) => <>{u.username.toUpperCase()}</>)}
               </StyledTableCell>
-              <StyledTableCell align="right">{currentUser.email}</StyledTableCell>
-              <StyledTableCell align="right">{row.meeting_address}</StyledTableCell>
-              <StyledTableCell align="right">{row.invite_code}</StyledTableCell>
-              <StyledTableCell align="right">{row.details}</StyledTableCell>
+              <StyledTableCell align="right">{exchange.invite_code}</StyledTableCell>
+              <StyledTableCell align="right">{exchange.meeting_address}</StyledTableCell>
+              <StyledTableCell align="right">{exchange.details}</StyledTableCell>
+              <StyledTableCell align="right">
+                {moment(exchange.meettime).utc().format('MM-YYYY-DD')}
+              </StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>
