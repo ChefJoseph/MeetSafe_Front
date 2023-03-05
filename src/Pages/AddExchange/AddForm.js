@@ -5,7 +5,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Stack from "@mui/material/Stack";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { Grid, Input, TextField, Typography } from "@mui/material";
+import { Grid, Input, TextField, Typography, Autocomplete as AutocompleteInput } from "@mui/material";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
 import Button from "@mui/material/Button";
@@ -27,7 +27,12 @@ function AddForm() {
   const [endCoor, setEndCoor] = useState(null);
   const [address1, setAddress1] = useState(null);
   const [meetAddress, setMeetAddress] = useState(null);
-  const [targetParty, setTargetParty] = useState("");
+  const [targetParty, setTargetParty] = useState(""); 
+
+  const [filteredUsers,setFilteredUsers] = useState([])
+
+  const [users,setUsers] = useState([])
+  const [user,setUser] = useState("")
 
   // ref for party input
   const partyRef = useRef();
@@ -39,13 +44,25 @@ function AddForm() {
   const [nearby, setNearby] = useState({});
   const [midPoint, findMidPoint, findCoordinate] = useMidPointFinder();
 
+  useEffect(()=> {
+    fetch("users").then(resp=>resp.json()).then(data=> {
+      setUsers(
+        data.filter(user=>user.id !== currentUser.id).map(user=>{return {label:user.username,id:user.id}})
+      )
+    })
+  },[])
+
+  console.log(users)
+
+
   function addParty() {
-    if (partyRef.current.value) {
-      if (partyRef.current.value === currentUser.username) {
-        alert("Cannot add yourself");
-        return;
-      }
-      fetch(`users/find/${partyRef.current.value}`)
+    // if (partyRef.current.value) {
+    //   if (partyRef.current.value === currentUser.username) {
+    //     alert("Cannot add yourself");
+    //     return;
+    //   }
+      if (user === "") return
+      fetch(`users/find/${user}`)
         .then((res) => res.json())
         .then((data) => {
           if (data.error) {
@@ -60,9 +77,9 @@ function AddForm() {
             setTargetParty(partyRef.current.value);
           }
         });
-    } else {
-      alert("Please enter other party username");
-    }
+    // } else {
+    //   alert("Please enter other party username");
+    // }
   }
 
   function updateOrigin() {
@@ -121,6 +138,7 @@ function AddForm() {
     }
   }
 
+
   useEffect(() => {
     if (currentUser.lat && currentUser.lng) {
       setStartCoor({
@@ -165,11 +183,14 @@ function AddForm() {
             {/* <Grid container spacing={2}>
             <Grid item xs={6}> */}
             <h1>Create an invite</h1>
-            <input
-              ref={partyRef}
-              style={{ width: "100%", height: "50px", borderRadius: "5px", borderWidth: '1px' }}
-              placeholder={"Username"}
-            ></input>
+            <AutocompleteInput
+            onChange={(e)=>setUser(e.target.innerText)}
+              disablePortal
+                id="combo-box"
+                options={users}
+                sx={{ width: 300 }}
+                renderInput={(params) => <TextField key={params.id} {...params} label="Username" />}
+            />
             <Box>
               <Button colorScheme="pink" type="submit" onClick={addParty}>
                 Add party
@@ -186,6 +207,7 @@ function AddForm() {
             }}
             placeholder={"Description"}
             ></input>
+
 
             <LocalizationProvider dateAdapter={AdapterDayjs} sx={{ mt: 2 }}>
               <Stack spacing={0}>

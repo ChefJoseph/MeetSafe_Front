@@ -26,7 +26,7 @@ function Index() {
     fetch("/logout",{method:"DELETE"}).then(resp => {
       if (resp.ok) {
         setCurrentUser({})
-        navigate("/login")
+        navigate("/login",{ replace: true })
 
       }
       else {

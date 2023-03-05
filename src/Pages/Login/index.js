@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Link as RouteLink } from 'react-router-dom';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../Context/UserContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -35,6 +35,16 @@ export default function LogIn() {
   const navigate = useNavigate()
   const { setCurrentUser } = useContext(UserContext);
 
+  const [error, setError] = useState(false)
+
+  useEffect(()=> {
+      const timer = setTimeout(() => {
+        setError(false)
+      }, 2000);
+
+      return ()=>clearInterval(timer)
+  },[error])
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -42,13 +52,17 @@ export default function LogIn() {
     fetch("/login",{
       method:"POST",
       body: data,
-    }).then(resp=>resp.json()).then(userObj=>{
-      console.log(userObj, "userObj /Login")
-      if (!userObj.errors || !userObj.error) {
+    }).then(resp=> {
+      if (resp.ok) {
+        return resp.json()
+      }
+      else {
+        return Promise.reject(resp)
+      }
+    }).then(userObj=>{
         setCurrentUser(userObj)
         navigate("/home")
-      }
-    }).catch(()=>navigate("/login"))
+    }).catch(err=>setError(err.statusText))
   };
 
   return (
@@ -83,7 +97,10 @@ export default function LogIn() {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Log In
+            {
+              error ? error + " Please Try Again" : "Log In"
+
+            }
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <TextField
